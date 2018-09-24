@@ -29,7 +29,6 @@ class Deck extends React.Component {
 
         return (
             <Grid item xs={12}>
-                <button onClick={this.props.start}>play</button>
                 <Grid
                     container
                     justify="center"

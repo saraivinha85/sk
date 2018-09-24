@@ -8,6 +8,7 @@ import createSocketIOMiddleware from 'redux-socket.io'
 
 import logger from 'redux-logger'
 
+import GameOptions from './components/GameOptions'
 import Players from './components/Players'
 import Deck from './components/Deck'
 import Table from './components/Table'
@@ -23,6 +24,7 @@ ReactDOM.render(
     <Provider store={store}>
         <div>
 			<Players/>
+            <GameOptions/>
             <Deck/>
             <Table/>
         </div>
