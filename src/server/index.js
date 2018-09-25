@@ -1,26 +1,30 @@
 import Http from 'http'
 import SocketIO from 'socket.io'
 import Express from 'express'
+import Session from 'express-session'
 import Random from 'random-array-generator'
 import Passport from 'passport'
+import Path from 'path'
 
-import {expressAuth, socketioAuth} from './auth'
+import {expressAuth, socketioAuth, sessionOpts} from './auth'
 
 const server = Http.createServer()
 server.listen(3001)
 
 const io = SocketIO()
-socketioAuth(io)
-io.attach(server)
+
 
 expressAuth(Passport)
 const app = Express()
+app.use(Express.static(Path.resolve(__dirname, '..', '..', 'build')))
+app.use(Session(sessionOpts))
 app.use(Passport.initialize())
+app.use(Passport.session())
 
-app.get('/', (req, res) => {
-    res.json({
-        status: 'session cookie not set'
-    })
+app.get('/', Passport.authenticate('google', {
+    failureRedirect: '/'
+}), (req, res) => {
+    res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index.html'))
 })
 
 app.get('/auth/google', Passport.authenticate('google', {
@@ -31,12 +35,12 @@ app.get('/auth/google/callback',
     Passport.authenticate('google', {
         failureRedirect: '/'
     }),
-    (req, res) => { console.log(req.user); res.json("nice!") }
+    (req, res) => {
+        socketioAuth(io)
+        io.attach(server)
+        res.redirect('/')
+    }
 )
-
-app.get('/nice', (req, res) => {
-    res.json('ok')
-})
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000')

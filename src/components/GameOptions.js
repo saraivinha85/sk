@@ -15,4 +15,14 @@ class GameOptions extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        start: () => {dispatch()},
+        dispatch
+    }
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(GameOptions)

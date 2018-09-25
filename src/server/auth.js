@@ -46,7 +46,7 @@ const googleStrategy = () => {
     })
 }
 
-const sessionOpts = {
+export const sessionOpts = {
     key: 'connect.sid',
     store: sessionStore,
     secret: 'test',
@@ -60,11 +60,11 @@ const passportAuthorizeConfig = {
     secret: sessionOpts.secret,
     store: sessionOpts.store,
     success: (data, accept) => {
-        console.log('successful connection to socket.io')
+        console.log('Successful connection to socket.io')
         accept()
     },
     fail: (data, message, error, accept) => {
-        console.log('failed connection to socket.io:', message)
+        console.log('Failed connection to socket.io:', message)
         console.log(data.sessionID)
 
         if(error) {
