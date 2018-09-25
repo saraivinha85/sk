@@ -64,12 +64,7 @@ const passportAuthorizeConfig = {
         accept()
     },
     fail: (data, message, error, accept) => {
-        console.log('Failed connection to socket.io:', message)
-        console.log('Session ID was ' + data.sessionID)
-
-        if(error) {
-            accept(new Error(message))
-        }
+        accept(new Error("404"))
     }
 }
 
