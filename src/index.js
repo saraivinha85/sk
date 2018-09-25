@@ -17,6 +17,22 @@ import registerServiceWorker from './registerServiceWorker'
 
 
 const socket = io("http://localhost:3001") 
+socket.on('connect', (reason) => {
+    console.log(reason)
+})
+socket.on('disconnect', (reason) => {
+    console.log(reason)
+})
+socket.on('error', (reason) => {
+    console.log(reason)
+})
+socket.on('connect_error', (reason) => {
+    console.log(reason)
+})
+socket.on('connect_timeout', (reason) => {
+    console.log(reason)
+})
+
 const socketIOMiddleware = createSocketIOMiddleware(socket, "server/")
 const store = applyMiddleware(logger, socketIOMiddleware)(createStore)(reducers)
 

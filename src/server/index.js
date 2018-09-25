@@ -20,9 +20,11 @@ app.use(Express.static(Path.resolve(__dirname, '..', '..', 'build')))
 app.use(Session(sessionOpts))
 app.use(Passport.initialize())
 app.use(Passport.session())
+io.attach(server)
+socketioAuth(io)
 
 app.get('/', Passport.authenticate('google', {
-    failureRedirect: '/'
+    failureRedirect: '/auth/google'
 }), (req, res) => {
     res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index.html'))
 })
@@ -33,11 +35,9 @@ app.get('/auth/google', Passport.authenticate('google', {
 
 app.get('/auth/google/callback',
     Passport.authenticate('google', {
-        failureRedirect: '/'
+        failureRedirect: '/error'
     }),
     (req, res) => {
-        socketioAuth(io)
-        io.attach(server)
         res.redirect('/')
     }
 )
@@ -48,6 +48,7 @@ app.listen(3000, () => {
 
 const IO_CLIENTS = []
 let ROUND = 1
+
 
 io.on('connection', (socket) => {
     console.log("Socket connected: " + socket.id)
