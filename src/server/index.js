@@ -4,15 +4,16 @@ import Express from 'express'
 import Random from 'random-array-generator'
 import Passport from 'passport'
 
-import auth from './auth'
+import {expressAuth, socketioAuth} from './auth'
 
 const server = Http.createServer()
 server.listen(3001)
 
 const io = SocketIO()
+socketioAuth(io)
 io.attach(server)
 
-auth(Passport)
+expressAuth(Passport)
 const app = Express()
 app.use(Passport.initialize())
 
