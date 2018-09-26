@@ -20,6 +20,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "latest",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "latest",
     "redux": "latest",
     "redux-logger": "^3.0.6",
@@ -29,7 +30,7 @@
   "scripts": {
     "start": "react-scripts start",
     "server": "babel-node --presets babel-preset-env src/server/index.js",
-    "build": "react-scripts build",
+    "build": "react-scripts build && mv build/index.html build/index-client.html",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

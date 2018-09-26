@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
+import { withRouter } from 'react-router-dom'
 
 import io from 'socket.io-client'
 import createSocketIOMiddleware from 'redux-socket.io'
@@ -17,21 +18,13 @@ import registerServiceWorker from './registerServiceWorker'
 
 
 const socket = io("http://localhost:3001") 
-socket.on('connect', (reason) => {
-    console.log(reason)
-})
-socket.on('disconnect', (reason) => {
-    console.log(reason)
-})
+
 socket.on('error', (reason) => {
-    console.log(reason)
+	//if (reason === '404') {
+		//this.props.history
+	//}
 })
-socket.on('connect_error', (reason) => {
-    console.log(reason)
-})
-socket.on('connect_timeout', (reason) => {
-    console.log(reason)
-})
+
 
 const socketIOMiddleware = createSocketIOMiddleware(socket, "server/")
 const store = applyMiddleware(logger, socketIOMiddleware)(createStore)(reducers)

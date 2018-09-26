@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 
-import {playCard} from '../actions/card'
+import {playCard} from '../actions/round'
 
 class Card extends React.Component {
     state = {

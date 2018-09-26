@@ -8,25 +8,26 @@ import Path from 'path'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 
-const server = Http.createServer()
-server.listen(3001)
-
-const io = SocketIO()
-
-
-expressAuth(Passport)
 const app = Express()
+expressAuth(Passport)
 app.use(Express.static(Path.resolve(__dirname, '..', '..', 'build')))
 app.use(Session(sessionOpts))
 app.use(Passport.initialize())
 app.use(Passport.session())
-io.attach(server)
+
+const server = Http.createServer(app)
+
+const io = SocketIO(server)
 socketioAuth(io)
 
-app.get('/', Passport.authenticate('google', {
-    failureRedirect: '/auth/google'
-}), (req, res) => {
-    res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index.html'))
+const isAuthenticated = (req, res, next) => { return req.isAuthenticated()? next() : res.redirect('/auth/google') }
+
+app.get('/', isAuthenticated, (req, res) => {
+    res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
+})
+
+app.get('/error', (req, res) => {
+    res.status(404)
 })
 
 app.get('/auth/google', Passport.authenticate('google', {
@@ -42,29 +43,48 @@ app.get('/auth/google/callback',
     }
 )
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000')
+server.listen(3001, () => {
+    console.log('Server is running on port 3001')
 })
 
 const IO_CLIENTS = []
+let BETS = []
 let ROUND = 1
+let LEADER = null
 
+io.set('authorization', function (req, callback) {
+    callback(null, req.isAuthenticated())
+})
 
 io.on('connection', (socket) => {
     console.log("Socket connected: " + socket.id)
 
     IO_CLIENTS.push(socket)
-    const players = IO_CLIENTS.map((c) => {return c.id})
-    io.emit('action', {type: 'PLAYER_JOIN', payload: players})
+    const players = getCurrentPlayers()
+
+    if (LEADER === null) {
+        LEADER = socket.id
+    }
+
+    socket.emit('action', {type: 'WELCOME_PLAYER', payload: socket.id})
+    io.emit('action', {type: 'PLAYER_JOIN', payload: { players: players, leader: LEADER}})
 
     socket.on('action', (action) => {
-        console.log("Got action: " + action.type + " " + action.data)
+        console.log("Got action: " + action.type + " " + action.payload)
 
         switch (action.type) {
-            case 'server/LOGIN':
-                return //login()
-            case 'server/START':
-                return dealCardsForRound(ROUND++ % 11)
+            case 'server/START_ROUND':
+                BETS = new Array(IO_CLIENTS.length)
+                BETS.fill(null)
+                dealCardsForRound(ROUND++ % 11)
+                return
+            case 'server/PLACE_BET':
+                BETS[getPlayerIndex(socket)] = action.payload
+                if (BETS.findIndex((b) => {return b === null}) === -1) {
+                    console.log('All players bet')
+                    io.emit('action', {type: 'BETS_IN_PLACE', payload: BETS})
+                }
+                return
             default:
                 return
         }
@@ -74,10 +94,24 @@ io.on('connection', (socket) => {
         console.log("Socket disconnected: " + socket.id)
         const idx = IO_CLIENTS.indexOf(socket)
         IO_CLIENTS.splice(idx, 1)
-        const players = IO_CLIENTS.map((c) => {return c.id})
-        io.emit('action', {type: 'PLAYER_LEFT', payload: players})
+        const players = getCurrentPlayers()
+        if(LEADER === socket.id && players.length > 0) {
+            LEADER = players[0].id 
+        }
+
+        if (players.length>0) {
+            io.emit('action', {type: 'PLAYER_LEFT', payload: {players: players, leader: LEADER}})
+        }
     })
 })
+
+const getPlayerIndex = (socket) => {
+    return IO_CLIENTS.findIndex((c) => {return c.id === socket.id})
+}
+
+const getCurrentPlayers = () => {
+	return IO_CLIENTS.map((c) => {return { id: c.id, name: c.request.user.displayName, photo: c.request.user.image}})
+}
 
 const dealCardsForRound = (round) => {
     const cards = Random.randomArray({min: 0, max: 65, elements: round * IO_CLIENTS.length})

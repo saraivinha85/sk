@@ -3,40 +3,68 @@ import {connect} from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
+import Avatar from '@material-ui/core/Avatar'
 
 import Card from './Card'
-import {start} from '../actions/game'
+import {placeBet} from '../actions/round'
 
 class Deck extends React.Component {
 
     state = {
         spacing: '0',
+        hasBet: false
     }
 
     buildDeck = () => {
         return this.props.cards.map( c =>
             <Grid key={c} item>
-                <Card id={c}/>
+                <Card disabled={!this.props.canPlayCard} id={c}/>
             </Grid>
         )
     }
 
+    buildTricks = (round) => {
+        return [...Array(round+1).keys()].map((t)=>{
+            return <Grid key={t} item>
+                <Avatar onClick={() => {this.handleBet(t)}}>{`${t}`}</Avatar> 
+            </Grid>
+        })
+    }
+
+    handleBet = (bet) => {
+        this.props.placeBet(bet)
+        this.setState({hasBet: true})
+    }
+
     render() {
-        const { classes } = this.props;
+        const { classes, cards } = this.props;
         const { spacing } = this.state;
 
         const deck = this.buildDeck()
 
+        const round = cards.length
+        const tricks = this.buildTricks(round)
+
         return (
-            <Grid item xs={12}>
-                <Grid
-                    container
-                    justify="center"
-                    spacing={Number(spacing)}
-                >
-                    {deck}
+            <div>
+                <Grid item xs={12}>
+                    <Grid
+                        container
+                        justify="center"
+                        spacing={Number(spacing)}
+                    >
+                        {deck}
+                    </Grid>
+                    <br/>
+                    <Grid
+                        container
+                        justify="center"
+                        spacing={Number(spacing)}
+                    >
+                        { round > 0 && !this.state.hasBet && tricks}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </div>
         )
     }
 }
@@ -56,13 +84,14 @@ const styles = theme => ({
 
 const mapStateToProps = (state) => {
     return {
-        cards: state.deck.cards
+        cards: state.deck.cards,
+        canPlayCard: state.round.bets.length === state.game.players.length,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        start: () => {dispatch(start())},
+        placeBet: (bet) => {dispatch(placeBet(bet))},
         dispatch
     }
 }
