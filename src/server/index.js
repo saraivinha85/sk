@@ -86,12 +86,13 @@ io.on('connection', (socket) => {
             case 'server/PLACE_BET':
                 BETS[getPlayerIndex(socket)] = action.payload
                 if (BETS.findIndex((b) => {return b === null}) === -1) {
-                    console.log('All players bet')
+                    console.log('Bets placed...', BETS)
                     io.emit('action', {type: 'BETS_IN_PLACE', payload: BETS})
                 }
                 return
-            case 'server/PLAY_CARD':
+            case 'server/PLAY_CARD':                
                 ROUND_CARDS[getPlayerIndex(socket)] = action.payload
+                console.log(socket.request.user.displayName, "played ", cardMap[action.payload])
                 if (ROUND_CARDS.findIndex((b) => {return b === null}) === -1) {
                     console.log('All players played. Computing score...')
                     const score = calculateScore(ROUND_CARDS)
@@ -134,40 +135,41 @@ const calculateScore = (cards) => {
     const p = cards.find((c) => {return c > 0 && c < 7})
     const m = cards.find((c) => {return c > 6 && c < 9})
 
-    if (sk && !m) {
+    if (sk !== undefined && m === undefined) {
         return {
             winner: cards.indexOf(sk),
             bonus: cards.filter((c)=> {return c > 0 && c < 7 || c === 66}).length * 30
         }
-    } else if (sk && m) {
+    } else if (sk !== undefined && m !== undefined) {
         return {
             winner: cards.indexOf(m),
             bonus: 50
         } 
-    } else if (p) {
+    } else if (p !== undefined) {
         return {
             winner: cards.indexOf(p),
             bonus: 0
         }
-    } else if (m) {
+    } else if (m !== undefined) {
         return {
             winner: cards.indexOf(m),
             bonus: 0
         }
     }
 
-    const black = Math.min(...cards.filter((c) => {c > 8 && c < 22}))
-
-    if (black) {
-        return {
-            winner: cards.indexOf(black),
+    console.log('No figures in round!')
+    const blacks = cards.filter((c) => {return c > 8 && c < 22})
+    if (blacks.length) {
+    	return {
+            winner: cards.indexOf(Math.min(...blacks)),
             bonus: 0
         }
     }
 
+    console.log('No blacks in round!')
+
     const first_color = cardMap[cards[0]].color
-    const cards_color = cardMap.filter((c) => {return c.color === first_color})
-    const color = Math.min(...cards.filter((c) => {return cards_color.includes(first_color)}))
+    const color = Math.min(...cards.filter((c) => {return cardMap[c].color === first_color}))
     return {
         winner: cards.indexOf(color),
         bonus: 0
