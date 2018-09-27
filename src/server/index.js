@@ -7,6 +7,7 @@ import Passport from 'passport'
 import Path from 'path'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
+import cardMap from '../cards.json'
 
 const app = Express()
 expressAuth(Passport)
@@ -93,6 +94,8 @@ io.on('connection', (socket) => {
                 ROUND_CARDS[getPlayerIndex(socket)] = action.payload
                 if (ROUND_CARDS.findIndex((b) => {return b === null}) === -1) {
                     console.log('All players played. Computing score...')
+                    const score = calculateScore(ROUND_CARDS)
+                    console.log(score)
                     io.emit('action', {type: 'TRICK_SCORE', payload: ROUND_CARDS})
                     SET_COUNT++
                 }
@@ -121,6 +124,55 @@ io.on('connection', (socket) => {
         }
     })
 })
+
+const calculateScore = (cards) => {
+
+    console.log(cardMap[cards[0]])
+    console.log(cardMap[cards[1]])
+
+    const sk = cards.find((c) => {return c === 0})
+    const p = cards.find((c) => {return c > 0 && c < 7})
+    const m = cards.find((c) => {return c > 6 && c < 9})
+
+    if (sk && !m) {
+        return {
+            winner: cards.indexOf(sk),
+            bonus: cards.filter((c)=> {return c > 0 && c < 7 || c === 66}).length * 30
+        }
+    } else if (sk && m) {
+        return {
+            winner: cards.indexOf(m),
+            bonus: 50
+        } 
+    } else if (p) {
+        return {
+            winner: cards.indexOf(p),
+            bonus: 0
+        }
+    } else if (m) {
+        return {
+            winner: cards.indexOf(m),
+            bonus: 0
+        }
+    }
+
+    const black = Math.min(...cards.filter((c) => {c > 8 && c < 22}))
+
+    if (black) {
+        return {
+            winner: cards.indexOf(black),
+            bonus: 0
+        }
+    }
+
+    const first_color = cardMap[cards[0]].color
+    const cards_color = cardMap.filter((c) => {return c.color === first_color})
+    const color = Math.min(...cards.filter((c) => {return cards_color.includes(first_color)}))
+    return {
+        winner: cards.indexOf(color),
+        bonus: 0
+    }
+}
 
 const getPlayerIndex = (socket) => {
     return IO_CLIENTS.findIndex((c) => {return c.id === socket.id})
