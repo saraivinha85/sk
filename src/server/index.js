@@ -167,9 +167,17 @@ const calculateScore = (cards) => {
     }
 
     console.log('No blacks in round!')
+    const first_color = cards.find((c)=>{return cardMap[c].color !== ''})
 
-    const first_color = cardMap[cards[0]].color
-    const color = Math.min(...cards.filter((c) => {return cardMap[c].color === first_color}))
+    console.log('First color ', cardMap[first_color])
+    if (first_color === undefined) {
+        return {
+            winner: cards[0],
+            bonus: 0
+        }
+    }
+
+    const color = Math.min(...cards.filter((c) => {return cardMap[c].color === cardMap[first_color].color}))
     return {
         winner: cards.indexOf(color),
         bonus: 0
