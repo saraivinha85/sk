@@ -7,7 +7,7 @@ import Passport from 'passport'
 import Path from 'path'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
-import cardMap from '../cards.json'
+import {calculateScore} from './score'
 
 const app = Express()
 expressAuth(Passport)
@@ -125,64 +125,6 @@ io.on('connection', (socket) => {
         }
     })
 })
-
-const calculateScore = (cards) => {
-
-    console.log(cardMap[cards[0]])
-    console.log(cardMap[cards[1]])
-
-    const sk = cards.find((c) => {return c === 0})
-    const p = cards.find((c) => {return c > 0 && c < 7})
-    const m = cards.find((c) => {return c > 6 && c < 9})
-
-    if (sk !== undefined && m === undefined) {
-        return {
-            winner: cards.indexOf(sk),
-            bonus: cards.filter((c)=> {return c > 0 && c < 7 || c === 66}).length * 30
-        }
-    } else if (sk !== undefined && m !== undefined) {
-        return {
-            winner: cards.indexOf(m),
-            bonus: 50
-        } 
-    } else if (p !== undefined) {
-        return {
-            winner: cards.indexOf(p),
-            bonus: 0
-        }
-    } else if (m !== undefined) {
-        return {
-            winner: cards.indexOf(m),
-            bonus: 0
-        }
-    }
-
-    console.log('No figures in round!')
-    const blacks = cards.filter((c) => {return c > 8 && c < 22})
-    if (blacks.length) {
-    	return {
-            winner: cards.indexOf(Math.min(...blacks)),
-            bonus: 0
-        }
-    }
-
-    console.log('No blacks in round!')
-    const first_color = cards.find((c)=>{return cardMap[c].color !== ''})
-
-    console.log('First color ', cardMap[first_color])
-    if (first_color === undefined) {
-        return {
-            winner: cards[0],
-            bonus: 0
-        }
-    }
-
-    const color = Math.min(...cards.filter((c) => {return cardMap[c].color === cardMap[first_color].color}))
-    return {
-        winner: cards.indexOf(color),
-        bonus: 0
-    }
-}
 
 const getPlayerIndex = (socket) => {
     return IO_CLIENTS.findIndex((c) => {return c.id === socket.id})
