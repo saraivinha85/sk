@@ -56,6 +56,8 @@ let LEADER = null
 let ROUND_CARDS = []
 let SET_COUNT = 1
 
+let TRICKS = new Array(10).fill(null)
+
 io.set('authorization', function (req, callback) {
     callback(null, req.isAuthenticated())
 })
@@ -82,7 +84,7 @@ io.on('connection', (socket) => {
                 BETS.fill(null)
                 ROUND_CARDS = new Array(IO_CLIENTS.length)
                 ROUND_CARDS.fill(null)
-                dealCardsForRound(ROUND++ % 11)
+                dealCardsForRound(ROUND % 11)
                 return
             case 'server/PLACE_BET':
                 BETS[getPlayerIndex(socket)] = action.payload
@@ -98,11 +100,21 @@ io.on('connection', (socket) => {
                     console.log('All players played. Computing score...')
                     const score = calculateScore(ROUND_CARDS)
                     console.log(score)
+
+                    if (TRICKS[ROUND-1] === null) {
+                        TRICKS[ROUND-1] = new Array(IO_CLIENTS.length).fill(0)
+                    }
+
+                    TRICKS[ROUND-1][score.winner] += 1
+
+                    console.log(TRICKS)
+
                     io.emit('action', {type: 'TRICK_SCORE', payload: ROUND_CARDS})
                     SET_COUNT++
                 }
 
                 if (SET_COUNT > ROUND) {
+                    ROUND++
                     io.emit('action', {type: 'NEXT_ROUND', payload: { leader: ''}})
                 }
 
