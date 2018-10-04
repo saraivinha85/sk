@@ -80,6 +80,14 @@ test('With skull king and 3 pirate, Skull King should win with 90 bonus points',
     })
 })
 
+test('With skull king and scary mary played as flag, Skull King should win with 30 bonus points', () => {
+    const score = calculateScore([40, 30, 66, 0, 15])
+    expect(score).toEqual({
+        winner: 3,
+        bonus: 30 
+    })
+})
+
 test('With skull king and 3 pirate and 1 mermaid, mermaid should win with 50 bonus points', () => {
     const score = calculateScore([4, 3, 9, 0, 8, 1])
     expect(score).toEqual({
@@ -130,6 +138,14 @@ test('With 1 mermaid and color cards, mermaid should win', () => {
 
 test('With 2 mermaid and color cards, first mermaid should win', () => {
     const score = calculateScore([10, 8, 11, 7, 57])
+    expect(score).toEqual({
+        winner: 1,
+        bonus: 0
+    })
+})
+
+test('With scary mary as flag and color cards, first color should win', () => {
+    const score = calculateScore([66, 40, 30, 52])
     expect(score).toEqual({
         winner: 1,
         bonus: 0

@@ -24,7 +24,7 @@
         "color": ""
     },
     {
-        "name": "Scary Mary",
+        "name": "Scary Mary Pirate",
         "color": ""
     },
     {
@@ -261,7 +261,12 @@
     },
     {
         "name": "Flag",
+        "color": ""
+    },
+    {
+        "name": "Scary Mary Flag",
         "color": ""
     }
+
 ]
 
