@@ -8,6 +8,7 @@ import Path from 'path'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 import {calculateScore} from './score'
+import cardMap from '../cards'
 
 const app = Express()
 expressAuth(Passport)
