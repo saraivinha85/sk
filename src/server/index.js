@@ -148,7 +148,7 @@ const getCurrentPlayers = () => {
 }
 
 const dealCardsForRound = (round) => {
-    const cards = Random.randomArray({min: 0, max: 65, elements: round * IO_CLIENTS.length})
+    const cards = Random.randomArray({min: 0, max: 66, elements: round * IO_CLIENTS.length})
     IO_CLIENTS.forEach((c) => {
         console.log(cards)
         const hand = cards.splice(0, round)
