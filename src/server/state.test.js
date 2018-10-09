@@ -219,24 +219,24 @@ test('Second round should start after first round ends', () => {
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
-            return s.bet(0, 2)
+            return s.bet(0, 1)
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
-            expect(s.round.bets[0]).toEqual(2)
+            expect(s.round.bets[0]).toEqual(1)
             return s.bet(1, 0) 
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
-            expect(s.round.bets[0]).toEqual(2)
+            expect(s.round.bets[0]).toEqual(1)
             expect(s.round.bets[1]).toEqual(0)
-            return s.bet(2, 3)
+            return s.bet(2, 1)
         })
         .then((options) => {
             expect(s.current).toEqual('setStarted')
-            expect(s.round.bets[0]).toEqual(2)
+            expect(s.round.bets[0]).toEqual(1)
             expect(s.round.bets[1]).toEqual(0)
-            expect(s.round.bets[2]).toEqual(3)
+            expect(s.round.bets[2]).toEqual(1)
             return s.allowPlay()
         })
         .then((options) => {
@@ -269,6 +269,7 @@ test('Second round should start after first round ends', () => {
         })
         .then((options) => {
             expect(s.current).toEqual('roundEnded')
+            expect(s.score).toEqual([20, 10, -10])
             return s.nextRound()
         })
         .then((options) => {

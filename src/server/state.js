@@ -1,6 +1,6 @@
 import FSM from 'fsm-as-promised'
 
-import {trickScore} from './score'
+import {trickScore, roundScore} from './score'
 
 const state = {
     players: [],
@@ -37,6 +37,7 @@ FSM({
             this.players.push(...options.args)
         },
         onstart: function (options) {
+            this.score = new Array(this.players.length)
         },
         onenteredroundStarted: function (options) {
             this.round.index += 1
@@ -45,7 +46,9 @@ FSM({
             this.round.bonus = new Array(this.players.length).fill(0)
         },
         onenteredroundEnded: function (options) {
-
+            const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
+            console.log(score)
+            this.score = this.score.map((s, idx) => {return s + score[idx]})
         },
         ondeal: function (options) {
             console.log('Dealing', this.round.index + 1, 'cards')
