@@ -1,6 +1,18 @@
 import cardMap from '../cards.json'
 
-export const calculateScore = (cards) => {
+export const roundScore = (roundIndex, bets, tricks, bonus) => {
+    return bets.map((b, idx) => {
+        return b===0 && b===tricks[idx]
+            ? (roundIndex + 1) * 10 + bonus[idx]
+            : b===tricks[idx]
+            ? b * 20 + bonus[idx]
+            : b===0
+            ? (roundIndex + 1) * -10 
+            : Math.abs(b-tricks[idx]) * -10
+    })
+}
+
+export const trickScore = (cards) => {
     console.log(cards.map((c) => cardMap[c]))
 
     const sk = cards.find((c) => {return c === 0})
@@ -31,7 +43,7 @@ export const calculateScore = (cards) => {
 
     const blacks = cards.filter((c) => {return c > 8 && c < 22})
     if (blacks.length) {
-    	return {
+        return {
             winner: cards.indexOf(Math.min(...blacks)),
             bonus: 0
         }

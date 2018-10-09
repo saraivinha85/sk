@@ -1,15 +1,19 @@
 import FSM from 'fsm-as-promised'
 
+import {trickScore} from './score'
+
 const state = {
     players: [],
+    first: null,
     round: {
         index: -1,
         bets: [],
         set: {
             index: -1,
             plays: [],
-            tricks: []
-        }
+        },
+        tricks: [],
+        bonus: []
     },
     score: []
 }
@@ -37,6 +41,11 @@ FSM({
         onenteredroundStarted: function (options) {
             this.round.index += 1
             this.round.bets = new Array(this.players.length).fill(null)
+            this.round.tricks = new Array(this.players.length).fill(0)
+            this.round.bonus = new Array(this.players.length).fill(0)
+        },
+        onenteredroundEnded: function (options) {
+
         },
         ondeal: function (options) {
             console.log('Dealing', this.round.index + 1, 'cards')
@@ -52,6 +61,10 @@ FSM({
         },
         onenteredsetEnded: function (options) {
             console.log('Set', state.round.set.index, 'ended')
+            const winner = trickScore(this.round.set.plays)
+            this.round.tricks[winner.winner] += 1
+            this.round.bonus[winner.winner] += winner.bonus
+            this.first = winner.winner
         },
         onplay: function (options) {
             this.round.set.plays[options.args[0]] = options.args[1]
