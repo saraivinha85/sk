@@ -1,6 +1,7 @@
 import FSM from 'fsm-as-promised'
 
 import {trickScore, roundScore} from './score'
+import { func } from 'prop-types';
 
 const state = {
     players: [],
@@ -28,7 +29,7 @@ FSM({
         {name: 'bet', from: 'waitingBets', to: ['waitingBets', 'setStarted'], condition: function () {return this.round.bets.find((b) =>  b === null) === undefined? 1: 0}},
         {name: 'allowPlay', from: 'setStarted', to: 'waitingPlays'},
         {name: 'play', from: 'waitingPlays', to: ['waitingPlays', 'setEnded'], condition: function () {return this.round.set.plays.find((b) => b === null) === undefined? 1: 0}},
-        {name: 'nextSet', from: 'setEnded', to: ['setStarted', 'roundEnded'], condition: function () { return this.round.index === this.round.set.index? 1: 0 }},
+        {name: 'nextSet', from: 'setEnded', to: ['setStarted', 'roundEnded'], condition: function () { return this.round.set.index >= this.round.index? 1: 0 }},
         {name: 'nextRound', from: 'roundEnded', to: ['roundStarted', 'end'], condition: function () { return this.round.index === 10? 1 : 0 }},
         {name: 'finish', from: 'end', to: 'lobby'},
     ],
@@ -37,17 +38,17 @@ FSM({
             this.players.push(...options.args)
         },
         onstart: function (options) {
-            this.score = new Array(this.players.length)
+            this.score = new Array(this.players.length).fill(0)
         },
         onenteredroundStarted: function (options) {
             this.round.index += 1
             this.round.bets = new Array(this.players.length).fill(null)
             this.round.tricks = new Array(this.players.length).fill(0)
             this.round.bonus = new Array(this.players.length).fill(0)
+            this.round.set.index = -1
         },
         onenteredroundEnded: function (options) {
             const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
-            console.log(score)
             this.score = this.score.map((s, idx) => {return s + score[idx]})
         },
         ondeal: function (options) {
@@ -55,12 +56,16 @@ FSM({
         },
         onbet: function (options) {
             this.round.bets[options.args[0]] = options.args[1]
+
+
         },
         onenteredwaitingBets: function (options) {
         },
         onenteredsetStarted: function (options) {
-            this.round.set.index += 1
             this.round.set.plays = new Array(this.players.length).fill(null)
+        },
+        onentersetStarted: function (options) {
+            this.round.set.index += 1
         },
         onenteredsetEnded: function (options) {
             console.log('Set', state.round.set.index, 'ended')
@@ -71,6 +76,8 @@ FSM({
         },
         onplay: function (options) {
             this.round.set.plays[options.args[0]] = options.args[1]
+        },
+        onnextSet: function (option) {
         }
     }
 }, state)

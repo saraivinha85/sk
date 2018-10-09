@@ -5,12 +5,12 @@ const state = () => {
 }
 
 test('First state is lobby', () => {
-    const s = state() 
+    const s = state()
     expect(s.current).toEqual('lobby')
 })
 
 test('On join event, state is lobby and players joined', () => {
-    const s = state() 
+    const s = state()
     s.join('player1').then((options) => {
         expect(s.current).toEqual('lobby')
         expect(s.players).toEqual(['player1'])
@@ -45,7 +45,7 @@ test('On start event, state is roundStarted', () => {
     //})
 }) */
 
- test('On bet event, state is waitingBets till all players bet', () => {
+test('On bet event, state is waitingBets till all players bet', () => {
     const s = state()
     const players = ['p1', 'p2', 'p3']
     s.players = players
@@ -62,7 +62,7 @@ test('On start event, state is roundStarted', () => {
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
             //expect(s.round.bets[0]).toEqual(2)
-            return s.bet(1, 0) 
+            return s.bet(1, 0)
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
@@ -95,7 +95,7 @@ test('On setStarted should wait till all players play', () => {
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
             expect(s.round.bets[0]).toEqual(2)
-            return s.bet(1, 0) 
+            return s.bet(1, 0)
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
@@ -156,7 +156,7 @@ test('First round should have one set only', () => {
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
             expect(s.round.bets[0]).toEqual(2)
-            return s.bet(1, 0) 
+            return s.bet(1, 0)
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
@@ -200,6 +200,7 @@ test('First round should have one set only', () => {
             expect(s.round.tricks[2]).toEqual(1)
             expect(s.round.bonus[2]).toEqual(0)
             expect(s.first).toEqual(2)
+            expect(s.round.set.index).toEqual(0)
             return s.nextSet()
         })
         .then((options) => {
@@ -224,7 +225,7 @@ test('Second round should start after first round ends', () => {
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
             expect(s.round.bets[0]).toEqual(1)
-            return s.bet(1, 0) 
+            return s.bet(1, 0)
         })
         .then((options) => {
             expect(s.current).toEqual('waitingBets')
@@ -277,3 +278,168 @@ test('Second round should start after first round ends', () => {
             expect(s.round.index).toEqual(1)
         })
 })
+
+test('Two rounds', () => {
+    const s = state()
+    const players = ['p1', 'p2', 'p3']
+    s.players = players
+
+    s.start()
+        .then(() => {
+            expect(s.current).toEqual('roundStarted')
+            return s.deal()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingBets')
+            return s.bet(0, 1)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingBets')
+            expect(s.round.bets[0]).toEqual(1)
+            return s.bet(1, 0)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingBets')
+            expect(s.round.bets[0]).toEqual(1)
+            expect(s.round.bets[1]).toEqual(0)
+            return s.bet(2, 1)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('setStarted')
+            expect(s.round.bets[0]).toEqual(1)
+            expect(s.round.bets[1]).toEqual(0)
+            expect(s.round.bets[2]).toEqual(1)
+            return s.allowPlay()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(null)
+            expect(s.round.set.plays[1]).toEqual(null)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(1, 10)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(null)
+            expect(s.round.set.plays[1]).toEqual(10)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(0, 2)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(2)
+            expect(s.round.set.plays[1]).toEqual(10)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(2, 20)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('setEnded')
+            expect(s.round.set.plays[0]).toEqual(2)
+            expect(s.round.set.plays[1]).toEqual(10)
+            expect(s.round.set.plays[2]).toEqual(20)
+            return s.nextSet()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('roundEnded')
+            expect(s.score).toEqual([20, 10, -10])
+            return s.nextRound()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('roundStarted')
+            expect(s.round.index).toEqual(1)
+            return s.deal()
+        })
+
+        .then((options) => {
+            expect(s.current).toEqual('waitingBets')
+            return s.bet(0, 0)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingBets')
+            expect(s.round.bets[0]).toEqual(0)
+            return s.bet(1, 1)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingBets')
+            expect(s.round.bets[0]).toEqual(0)
+            expect(s.round.bets[1]).toEqual(1)
+            return s.bet(2, 0)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('setStarted')
+            expect(s.round.set.index).toEqual(0)
+            expect(s.round.bets[0]).toEqual(0)
+            expect(s.round.bets[1]).toEqual(1)
+            expect(s.round.bets[2]).toEqual(0)
+            return s.allowPlay()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(null)
+            expect(s.round.set.plays[1]).toEqual(null)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(1, 10)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(null)
+            expect(s.round.set.plays[1]).toEqual(10)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(0, 20)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(20)
+            expect(s.round.set.plays[1]).toEqual(10)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(2, 30)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('setEnded')
+            expect(s.round.set.plays[0]).toEqual(20)
+            expect(s.round.set.plays[1]).toEqual(10)
+            expect(s.round.set.plays[2]).toEqual(30)
+            expect(s.round.set.index).toEqual(0)
+            return s.nextSet()
+        })
+        .then((options) => {
+            expect(s.round.set.index).toEqual(1)
+            expect(s.current).toEqual('setStarted')
+            expect(s.round.tricks).toEqual([0, 1, 0])
+            return s.allowPlay()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(null)
+            expect(s.round.set.plays[1]).toEqual(null)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(1, 40)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(null)
+            expect(s.round.set.plays[1]).toEqual(40)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(0, 50)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('waitingPlays')
+            expect(s.round.set.plays[0]).toEqual(50)
+            expect(s.round.set.plays[1]).toEqual(40)
+            expect(s.round.set.plays[2]).toEqual(null)
+            return s.play(2, 13)
+        })
+        .then((options) => {
+            expect(s.current).toEqual('setEnded')
+            expect(s.round.set.plays[0]).toEqual(50)
+            expect(s.round.set.plays[1]).toEqual(40)
+            expect(s.round.set.plays[2]).toEqual(13)
+            expect(s.round.set.index).toEqual(1)
+            expect(s.round.tricks).toEqual([0, 1, 1])
+            return s.nextSet()
+        })
+        .then((options) => {
+            expect(s.current).toEqual('roundEnded')
+            expect(s.score).toEqual([40, 30, -30])
+        })
+    })
