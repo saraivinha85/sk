@@ -15,13 +15,13 @@ class Players extends React.Component {
 		const { classes, players, leader } = this.props;
         return (
             <div className={classes.root}>
-                <Paper elevation={1}>
+                {/* <Paper elevation={1}> */}
                     <List
                         subheader={<ListSubheader component="div">Online</ListSubheader>}     
                     >
                         {renderPlayers(players, leader)}					
                     </List>
-                </Paper>
+                {/* </Paper> */}
             </div>
         )
     }
@@ -41,7 +41,7 @@ const renderPlayers = (players, leader) => {
 const styles = theme => ({
     root: {
         //width: '100%',
-        maxWidth: 360,
+        // maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
     },
 })

@@ -9,11 +9,7 @@ import createSocketIOMiddleware from 'redux-socket.io'
 
 import logger from 'redux-logger'
 
-import GameOptions from './components/GameOptions'
-import GameQueue from './components/Queue'
-import Players from './components/Players'
-import Deck from './components/Deck'
-import Table from './components/Table'
+import Layout from './components/Layout'
 import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker'
 
@@ -32,17 +28,9 @@ const store = applyMiddleware(logger, socketIOMiddleware)(createStore)(reducers)
 
 ReactDOM.render(
     <Provider store={store}>
-        <div>
-            <div style={{display: 'flex'}}>
-                <Players/>
-                <GameQueue/>
-            </div>
-            <GameOptions/>
-            <Deck/>
-            <Table/>
-        </div>
+        <Layout />
     </Provider>,
     document.querySelector('#root')
 )
 
-//registerServiceWorker()
+registerServiceWorker()

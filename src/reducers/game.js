@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
     players: [],
-    queue: []
+    queue: [],
+    comments: []
 }
 
 const game = (state=INITIAL_STATE, action) => {
@@ -12,6 +13,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, id: action.payload}
         case 'PLAYER_JOIN':
             return {...state, queue: action.payload}
+        case 'NEW_COMMENT':
+            return {...state, comments: [...state.comments, action.payload]}
         default:
             return state
     }

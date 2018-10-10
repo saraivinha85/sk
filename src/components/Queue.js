@@ -45,7 +45,7 @@ class Queue extends Component {
 
         return (
             <div>
-                <Paper elevation={1}>
+                {/* <Paper elevation={1}> */}
                     <ListSubheader component="div">Queue</ListSubheader>
                     <div className={classes.root}>
                         {players}
@@ -54,7 +54,7 @@ class Queue extends Component {
                         Join queue
                         <PersonAdd className={classes.leftIcon} />
                     </Button>
-                </Paper>
+                {/* </Paper> */}
             </div>
         )
     }

@@ -13,3 +13,11 @@ export const joinQueue = (id) => {
     }
 }
 
+export const SUBMIT_COMMENT = "server/SUBMIT_COMMENT"
+export const submitComment = (comment) => {
+    return {
+        type: SUBMIT_COMMENT,
+        payload: comment
+    }
+}
+
