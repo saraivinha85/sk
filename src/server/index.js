@@ -87,7 +87,7 @@ io.on('connection', (socket) => {
                         return socket.emit('action', {type: 'ERROR', payload: "Can't join the game queue!"})
                     })
             case 'server/SUBMIT_COMMENT':
-                return io.emit('action', {type: 'NEW_COMMENT', payload: {name: socket.request.user.displayName, text: action.payload, ts: new Date().toJSON()}})
+                return io.emit('action', {type: 'NEW_COMMENT', payload: {from: socket.request.user.displayName, text: action.payload, ts: new Date().toJSON()}})
             case 'server/START_ROUND':
                 BETS = new Array(IO_CLIENTS.length)
                 BETS.fill(null)

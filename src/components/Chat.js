@@ -35,8 +35,8 @@ class Chat extends Component {
         return this.props.comments.map(row => {
             return (
                 <TableRow key={row.ts}>
-                    <TableCell component="th" scope="row">
-                        {row.from}
+                    <TableCell style={{ width: '20%' }}>
+                        {row.from}<p />{row.ts}
                     </TableCell>
                     <TableCell>{row.text}</TableCell>
                 </TableRow>
@@ -50,26 +50,28 @@ class Chat extends Component {
         return (
             <div>
                 <ListSubheader component="div">Chat</ListSubheader>
-                <Table className={classes.table}>
-                    <TableBody>
-                        {this.renderComments()}
-                    </TableBody>
-                </Table>
+                <div style={{height: '200px', overflow: 'auto'}}>
+                    <Table className={classes.table}>
+                        <TableBody>
+                            {this.renderComments()}
+                        </TableBody>
+                    </Table>
+                </div>
                 <TextField
-                    id="standard-full-width"
-                    label="Comment"
-                    fullWidth
-                    //style={{ margin: 8 }}
-                    //margin="normal"
-                    variant='filled'
-                    // InputProps={{
-                    //     startAdornment: <InputAdornment variant='filled' position="start">></InputAdornment>
-                    // }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    onKeyPress={this.submitComment}
-                />
+                        id="standard-full-width"
+                        label="Comment"
+                        fullWidth
+                        //style={{ margin: 8 }}
+                        //margin="normal"
+                        variant='filled'
+                        // InputProps={{
+                        //     startAdornment: <InputAdornment variant='filled' position="start">></InputAdornment>
+                        // }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onKeyPress={this.submitComment}
+                    />
             </div>
         )
     }
