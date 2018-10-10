@@ -1,14 +1,17 @@
 const INITIAL_STATE = {
     players: [],
+    queue: []
 }
 
 const game = (state=INITIAL_STATE, action) => {
     switch (action.type) {
-        case 'PLAYER_JOIN':
-        case 'PLAYER_LEFT':
+        case 'USER_JOIN':
+        case 'USER_LEFT':
             return {...state, players: action.payload.players, leader: action.payload.leader}
-        case 'WELCOME_PLAYER':
+        case 'USER_WELCOME':
             return {...state, id: action.payload}
+        case 'PLAYER_JOIN':
+            return {...state, queue: action.payload}
         default:
             return state
     }

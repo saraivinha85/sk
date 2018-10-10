@@ -56,8 +56,6 @@ FSM({
         },
         onbet: function (options) {
             this.round.bets[options.args[0]] = options.args[1]
-
-
         },
         onenteredwaitingBets: function (options) {
         },
@@ -69,10 +67,10 @@ FSM({
         },
         onenteredsetEnded: function (options) {
             console.log('Set', state.round.set.index, 'ended')
-            const winner = trickScore(this.round.set.plays)
-            this.round.tricks[winner.winner] += 1
-            this.round.bonus[winner.winner] += winner.bonus
-            this.first = winner.winner
+            const trick = trickScore(this.round.set.plays)
+            this.round.tricks[trick.winner] += 1
+            this.round.bonus[trick.winner] += trick.bonus
+            this.first = trick.winner
         },
         onplay: function (options) {
             this.round.set.plays[options.args[0]] = options.args[1]

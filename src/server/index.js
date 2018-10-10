@@ -10,6 +10,8 @@ import {expressAuth, socketioAuth, sessionOpts} from './auth'
 import {calculateScore} from './score'
 import cardMap from '../cards'
 
+import state from './state'
+
 const app = Express()
 expressAuth(Passport)
 app.use(Express.static(Path.resolve(__dirname, '..', '..', 'build')))
@@ -67,18 +69,23 @@ io.on('connection', (socket) => {
 
     IO_CLIENTS.push(socket)
     const players = getCurrentPlayers()
-
-    if (LEADER === null) {
-        LEADER = socket.id
-    }
-
-    socket.emit('action', {type: 'WELCOME_PLAYER', payload: socket.id})
-    io.emit('action', {type: 'PLAYER_JOIN', payload: { players: players, leader: LEADER}})
+    socket.emit('action', {type: 'USER_WELCOME', payload: socket.id})
+    io.emit('action', {type: 'USER_JOIN', payload: { players: players }})
 
     socket.on('action', (action) => {
         console.log("Got action: " + action.type + " " + action.payload)
 
         switch (action.type) {
+            case 'server/JOIN_QUEUE':
+                return state.join(socket)
+                    .then(() => {
+                        console.log("Hello")
+                        return io.emit('action', {type: 'PLAYER_JOIN', payload: getPlayersInfo(state.players)})
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        return socket.emit('action', {type: 'ERROR', payload: "Can't join the game queue!"})
+                    })
             case 'server/START_ROUND':
                 BETS = new Array(IO_CLIENTS.length)
                 BETS.fill(null)
@@ -134,7 +141,7 @@ io.on('connection', (socket) => {
         }
 
         if (players.length>0) {
-            io.emit('action', {type: 'PLAYER_LEFT', payload: {players: players, leader: LEADER}})
+            io.emit('action', {type: 'USER_LEFT', payload: {players: players, leader: LEADER}})
         }
     })
 })
@@ -144,7 +151,11 @@ const getPlayerIndex = (socket) => {
 }
 
 const getCurrentPlayers = () => {
-	return IO_CLIENTS.map((c) => {return { id: c.id, name: c.request.user.displayName, photo: c.request.user.image}})
+    return IO_CLIENTS.map((c) => {return { id: c.id, name: c.request.user.displayName, photo: c.request.user.image}})
+}
+
+const getPlayersInfo = (players) => {
+    return players.map((c) => {return { id: c.id, name: c.request.user.displayName, photo: c.request.user.image}})
 }
 
 const dealCardsForRound = (round) => {
