@@ -1,11 +1,11 @@
 import {combineReducers} from 'redux'
 
-import deck from './deck'
+import hand from './hand'
 import round from './round'
 import game from './game'
 
 export default combineReducers({
     game,
-    deck,
+    hand,
     round
 })

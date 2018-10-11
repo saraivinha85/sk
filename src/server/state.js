@@ -41,14 +41,14 @@ FSM({
             this.score = new Array(this.players.length).fill(0)
             this.first = 0
         },
-        onenteredroundStarted: function (options) {
+        onenterroundStarted: function (options) {
             this.round.index += 1
             this.round.bets = new Array(this.players.length).fill(null)
             this.round.tricks = new Array(this.players.length).fill(0)
             this.round.bonus = new Array(this.players.length).fill(0)
             this.round.set.index = -1
         },
-        onenteredroundEnded: function (options) {
+        onenterroundEnded: function (options) {
             const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
             this.score = this.score.map((s, idx) => {return s + score[idx]})
         },
@@ -58,15 +58,13 @@ FSM({
         onbet: function (options) {
             this.round.bets[options.args[0]] = options.args[1]
         },
-        onenteredwaitingBets: function (options) {
-        },
-        onenteredsetStarted: function (options) {
-            this.round.set.plays = new Array(this.players.length).fill(null)
+        onenterwaitingBets: function (options) {
         },
         onentersetStarted: function (options) {
             this.round.set.index += 1
+            this.round.set.plays = new Array(this.players.length).fill(null)
         },
-        onenteredsetEnded: function (options) {
+        onentersetEnded: function (options) {
             console.log('Set', state.round.set.index, 'ended')
             const trick = trickScore(this.round.set.plays)
             this.round.tricks[trick.winner] += 1

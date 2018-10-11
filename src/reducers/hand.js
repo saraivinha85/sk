@@ -4,7 +4,7 @@ const INITIAL_STATE = {
     cards: []
 }
 
-const deck = (state=INITIAL_STATE, action) => {
+const hand = (state=INITIAL_STATE, action) => {
     switch (action.type) {
         case "DEAL_CARDS":
             return {...state, cards: action.payload}
@@ -15,4 +15,4 @@ const deck = (state=INITIAL_STATE, action) => {
     }
 }
 
-export default deck
+export default hand

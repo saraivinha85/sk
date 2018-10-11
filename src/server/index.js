@@ -99,7 +99,7 @@ io.on('connection', (socket) => {
                     })
             case 'server/START_GAME':
                 return state.start().then(()=>{
-                    io.emit('action', {type: 'GAME_STARTED'})
+                    io.emit('action', {type: 'ROUND_STARTED', payload: state.round.index})
                     return state.deal()
                 }).then(() => {
                     return dealCardsForRound(state.players, state.round.index + 1)
@@ -111,9 +111,13 @@ io.on('connection', (socket) => {
             case 'server/PLACE_BET':
                 return state.bet(getPlayerIndex(socket, state.players), action.payload).then(() => {
                     if (state.is('setStarted')) {                        
-                        io.emit('action', {type: 'BETS_IN_PLACE', payload: BETS})
+                        io.emit('action', {type: 'BETS_IN_PLACE', payload: state.round.bets})
                         state.token = Uuid.v4()
-                        state.players[state.first].emit('action', {type: 'PLAY_TOKEN', payload: state.token}) 
+                        const firstPlayer = state.players[state.first]
+                        firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
+                        state.players.filter((p)=>p.id!==firstPlayer.id).forEach((p)=>{
+                            p.emit('action', {type: 'WAIT_PLAY'})
+                        })
                         return state.allowPlay() 
                     } else {
                         return
@@ -123,31 +127,24 @@ io.on('connection', (socket) => {
                     return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
                 })
             case 'server/PLAY_CARD':
-                if (action.token !== state.token) {
+                if (action.payload.token !== state.token) {
                     return
                 }
-
-                return state.play(action.card).then(() => {
-                    io.emit('action', {type: 'CARD_PLAYED', payload: { player: socket.id, card: action.card }})
+                console.log('Played card', action.payload.id)
+                return state.play(action.payload.id).then(() => {
+                    io.emit('action', {type: 'CARD_PLAYED', payload: state.round.set.plays})
                     if (state.is('waitingPlays')) {
                         state.token = Uuid.v4()
-                        state.first += 1
-                        return state.players[state.first].emit('action', { type:'PLAY_TOKEN', payload: state.token })
+                        state.first = ( state.first + 1 ) % state.players.length
+                        const nextPlayer = state.players[state.first]
+                        nextPlayer.emit('action', { type:'PLAY', payload: state.token })
+                        state.players.filter((p)=>p.id!==nextPlayer.id).forEach((p)=>{
+                            p.emit('action', {type: 'WAIT_PLAY'})
+                        })
                     } else {
                         return
                     }
                 })
-
-                //io.emit('action', {type: 'TRICK_SCORE', payload: ROUND_CARDS})
-                //SET_COUNT++
-                //}
-
-                //if (SET_COUNT > ROUND) {
-                //ROUND++
-                //io.emit('action', {type: 'NEXT_ROUND', payload: { leader: ''}})
-                //}
-
-                //return
             default:
                 return
         }

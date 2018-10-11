@@ -4,8 +4,6 @@ import {connect} from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Button from '@material-ui/core/Button'
 
@@ -50,7 +48,6 @@ class Queue extends Component {
 
         return (
             <div>
-                {/* <Paper elevation={1}> */}
                 <ListSubheader component="div">Queue</ListSubheader>
                 <div className={classes.root}>
                     {players}
@@ -61,7 +58,6 @@ class Queue extends Component {
                 <Button color="primary" variant='contained' disabled={!isJoined} className={classes.button} onClick={this.handleStartGame}>
                     Start
                 </Button>
-
             </div>
         )
     }

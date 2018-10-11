@@ -9,7 +9,7 @@ import GameOptions from './GameOptions'
 import GameQueue from './Queue'
 import Players from './Players'
 import Chat from './Chat'
-import Hand from './Deck'
+import Hand from './Hand'
 import GameTable from './Table'
 
 class Layout extends Component {
@@ -17,15 +17,6 @@ class Layout extends Component {
         const {classes, isGameStarted} = this.props
 
         return (
-            // <div>
-            //     <div style={{ display: 'flex' }}>
-            //         <Players />
-            //         <GameQueue />
-            //     </div>
-            //     <GameOptions />
-            //     <Deck />
-            //     <Table />
-            // </div>
             <div className={classes.root}>
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
@@ -70,6 +61,9 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatch
+    }
 }
 
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Layout))

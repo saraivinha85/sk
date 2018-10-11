@@ -24,9 +24,9 @@ class Card extends React.Component {
     }
 
     handleCardSelection = () => {
-        const {playCard, id, disabled} = this.props
-        if (!disabled) {
-            playCard(id)
+        const {playCard, id, disabled, canPlayCard, token} = this.props
+        if (!disabled && canPlayCard) {
+            playCard(id, token)
         }
     }
 
@@ -54,12 +54,14 @@ const styles = theme => ({
 
 const mapStateToProps = (state) => {
     return {
+        canPlayCard: state.round.canPlay,
+        token: state.round.token
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        playCard: (card) => {dispatch(playCard(card))},
+        playCard: (card, token) => {dispatch(playCard(card, token))},
         dispatch
     }
 }

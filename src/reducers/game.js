@@ -14,10 +14,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, id: action.payload}
         case 'PLAYER_JOIN':
             return {...state, queue: action.payload}
-        case 'GAME_STARTED':
+        case 'ROUND_STARTED':
             return {...state, started: true}
-        case 'PLAY_TOKEN':
-            return {...state, token: action.payload}
         case 'GAME_ENDED':
             return {...state, started: false}
         case 'NEW_COMMENT':
