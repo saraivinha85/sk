@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button'
 
 import PersonAdd from '@material-ui/icons/PersonAdd'
 
-import {joinQueue} from '../actions/game'
+import {joinQueue, startGame} from '../actions/game'
 
 class Queue extends Component {
 
@@ -23,9 +23,9 @@ class Queue extends Component {
         const {players, classes} = this.props
 
         return players.map((p) => {
-            return <Chip
+            return <StyledChip
                 key={p.id}
-                avatar={<Avatar src={p.photo} />}
+                avatar={<Avatar className={classes.bigAvatar} src={p.photo.replace('sz=50','sz=100')} />}
                 label={p.name}
                 onDelete={this.handleDelete}
                 className={classes.chip}
@@ -38,6 +38,11 @@ class Queue extends Component {
         joinQueue(id)
     }
 
+    handleStartGame = (e) => {
+        const {startGame} = this.props
+        startGame()
+    }
+
     render() {
         const {classes, isJoined} = this.props
 
@@ -46,19 +51,31 @@ class Queue extends Component {
         return (
             <div>
                 {/* <Paper elevation={1}> */}
-                    <ListSubheader component="div">Queue</ListSubheader>
-                    <div className={classes.root}>
-                        {players}
-                    </div>
-                    <Button variant="contained" color="primary" disabled={isJoined} className={classes.button} onClick={this.handleJoinQueue}>
-                        Join queue
-                        <PersonAdd className={classes.leftIcon} />
-                    </Button>
-                {/* </Paper> */}
+                <ListSubheader component="div">Queue</ListSubheader>
+                <div className={classes.root}>
+                    {players}
+                </div>
+                <Button variant="fab" color="primary" disabled={isJoined} className={classes.button} onClick={this.handleJoinQueue}>
+                    <PersonAdd />
+                </Button>
+                <Button color="primary" variant='contained' disabled={!isJoined} className={classes.button} onClick={this.handleStartGame}>
+                    Start
+                </Button>
+
             </div>
         )
     }
 }
+
+const StyledChip = withStyles({
+    root: {
+        marginTop: 0,
+        marginBottom: 0
+    },
+    deleteIcon: {
+        margin: '0px',
+    }
+})(Chip)
 
 const styles = theme => ({
     root: {
@@ -74,6 +91,14 @@ const styles = theme => ({
     },
     chip: {
         margin: theme.spacing.unit,
+        display: 'inline-table',
+    },
+    bigAvatar: {
+        width: 70,
+        height: 70,
+        display: 'inline-flex',
+        marginRight: '0px',
+        marginTop: '7px'
     },
 })
 
@@ -88,6 +113,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         joinQueue: (id) => {dispatch(joinQueue(id))},
+        startGame: () => {dispatch(startGame())},
         dispatch
     }
 }

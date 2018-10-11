@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import {connect} from 'react-redux'
 
+import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 
@@ -8,12 +9,12 @@ import GameOptions from './GameOptions'
 import GameQueue from './Queue'
 import Players from './Players'
 import Chat from './Chat'
-import Deck from './Deck'
-import Table from './Table'
+import Hand from './Deck'
+import GameTable from './Table'
 
 class Layout extends Component {
     render() {
-        const {classes} = this.props
+        const {classes, isGameStarted} = this.props
 
         return (
             // <div>
@@ -32,7 +33,7 @@ class Layout extends Component {
                     </Grid>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <GameQueue />
+                            {isGameStarted? <div><GameTable /><Hand/></div>: <GameQueue />}
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
@@ -62,4 +63,13 @@ const styles = theme => ({
     },
 })
 
-export default withStyles(styles)(Layout)
+const mapStateToProps = (state) => {
+    return {
+        isGameStarted: state.game.started
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Layout))

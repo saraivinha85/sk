@@ -61,12 +61,7 @@ class Chat extends Component {
                         id="standard-full-width"
                         label="Comment"
                         fullWidth
-                        //style={{ margin: 8 }}
-                        //margin="normal"
                         variant='filled'
-                        // InputProps={{
-                        //     startAdornment: <InputAdornment variant='filled' position="start">></InputAdornment>
-                        // }}
                         InputLabelProps={{
                             shrink: true,
                         }}

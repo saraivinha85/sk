@@ -39,6 +39,7 @@ FSM({
         },
         onstart: function (options) {
             this.score = new Array(this.players.length).fill(0)
+            this.first = 0
         },
         onenteredroundStarted: function (options) {
             this.round.index += 1
@@ -72,7 +73,7 @@ FSM({
             this.round.bonus[trick.winner] += trick.bonus
             this.first = trick.winner
         },
-        onplay: function (options) {
+        onplay: function (options) {            
             this.round.set.plays[options.args[0]] = options.args[1]
         },
         onnextSet: function (option) {

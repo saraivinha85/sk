@@ -5,6 +5,7 @@ import Session from 'express-session'
 import Random from 'random-array-generator'
 import Passport from 'passport'
 import Path from 'path'
+import Uuid from 'uuid'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 import {calculateScore} from './score'
@@ -79,7 +80,6 @@ io.on('connection', (socket) => {
             case 'server/JOIN_QUEUE':
                 return state.join(socket)
                     .then(() => {
-                        console.log("Hello")
                         return io.emit('action', {type: 'PLAYER_JOIN', payload: getPlayersInfo(state.players)})
                     })
                     .catch((error) => {
@@ -88,46 +88,66 @@ io.on('connection', (socket) => {
                     })
             case 'server/SUBMIT_COMMENT':
                 return io.emit('action', {type: 'NEW_COMMENT', payload: {from: socket.request.user.displayName, text: action.payload, ts: new Date().toJSON()}})
-            case 'server/START_ROUND':
-                BETS = new Array(IO_CLIENTS.length)
-                BETS.fill(null)
-                ROUND_CARDS = new Array(IO_CLIENTS.length)
-                ROUND_CARDS.fill(null)
-                dealCardsForRound(ROUND % 11)
-                return
+            case 'server/LEAVE_QUEUE':
+                return state.leave(socket)
+                    .then(() => {
+                        return io.emit('action', {type: 'PLAYER_LEAVE', payload: getPlayersInfo(state.players)})
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        return socket.emit('action', {type: 'ERROR', payload: "Can't leave the game queue!"})
+                    })
+            case 'server/START_GAME':
+                return state.start().then(()=>{
+                    io.emit('action', {type: 'GAME_STARTED'})
+                    return state.deal()
+                }).then(() => {
+                    return dealCardsForRound(state.players, state.round.index + 1)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
+                })
             case 'server/PLACE_BET':
-                BETS[getPlayerIndex(socket)] = action.payload
-                if (BETS.findIndex((b) => {return b === null}) === -1) {
-                    console.log('Bets placed...', BETS)
-                    io.emit('action', {type: 'BETS_IN_PLACE', payload: BETS})
-                }
-                return
-            case 'server/PLAY_CARD':                
-                ROUND_CARDS[getPlayerIndex(socket)] = action.payload
-                console.log(socket.request.user.displayName, "played ", cardMap[action.payload])
-                if (ROUND_CARDS.findIndex((b) => {return b === null}) === -1) {
-                    console.log('All players played. Computing score...')
-                    const score = calculateScore(ROUND_CARDS)
-                    console.log(score)
-
-                    if (TRICKS[ROUND-1] === null) {
-                        TRICKS[ROUND-1] = new Array(IO_CLIENTS.length).fill(0)
+                return state.bet(getPlayerIndex(socket, state.players), action.payload).then(() => {
+                    if (state.is('setStarted')) {                        
+                        io.emit('action', {type: 'BETS_IN_PLACE', payload: BETS})
+                        state.token = Uuid.v4()
+                        state.players[state.first].emit('action', {type: 'PLAY_TOKEN', payload: state.token}) 
+                        return state.allowPlay() 
+                    } else {
+                        return
                     }
-
-                    TRICKS[ROUND-1][score.winner] += 1
-
-                    console.log(TRICKS)
-
-                    io.emit('action', {type: 'TRICK_SCORE', payload: ROUND_CARDS})
-                    SET_COUNT++
+                }).catch((error) => {
+                    console.log(error)
+                    return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
+                })
+            case 'server/PLAY_CARD':
+                if (action.token !== state.token) {
+                    return
                 }
 
-                if (SET_COUNT > ROUND) {
-                    ROUND++
-                    io.emit('action', {type: 'NEXT_ROUND', payload: { leader: ''}})
-                }
+                return state.play(action.card).then(() => {
+                    io.emit('action', {type: 'CARD_PLAYED', payload: { player: socket.id, card: action.card }})
+                    if (state.is('waitingPlays')) {
+                        state.token = Uuid.v4()
+                        state.first += 1
+                        return state.players[state.first].emit('action', { type:'PLAY_TOKEN', payload: state.token })
+                    } else {
+                        return
+                    }
+                })
 
-                return
+                //io.emit('action', {type: 'TRICK_SCORE', payload: ROUND_CARDS})
+                //SET_COUNT++
+                //}
+
+                //if (SET_COUNT > ROUND) {
+                //ROUND++
+                //io.emit('action', {type: 'NEXT_ROUND', payload: { leader: ''}})
+                //}
+
+                //return
             default:
                 return
         }
@@ -148,8 +168,8 @@ io.on('connection', (socket) => {
     })
 })
 
-const getPlayerIndex = (socket) => {
-    return IO_CLIENTS.findIndex((c) => {return c.id === socket.id})
+const getPlayerIndex = (socket, players) => {
+    return players.findIndex((c) => {return c.id === socket.id})
 }
 
 const getCurrentPlayers = () => {
@@ -160,9 +180,9 @@ const getPlayersInfo = (players) => {
     return players.map((c) => {return { id: c.id, name: c.request.user.displayName, photo: c.request.user.image}})
 }
 
-const dealCardsForRound = (round) => {
-    const cards = Random.randomArray({min: 0, max: 66, elements: round * IO_CLIENTS.length})
-    IO_CLIENTS.forEach((c) => {
+const dealCardsForRound = (players, round) => {
+    const cards = Random.randomArray({min: 0, max: 66, elements: round * players.length})
+    players.forEach((c) => {
         console.log(cards)
         const hand = cards.splice(0, round)
         c.emit('action', {type: 'DEAL_CARDS', payload: hand})

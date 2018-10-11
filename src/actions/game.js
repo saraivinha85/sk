@@ -1,7 +1,7 @@
-export const START = "server/START_ROUND"
-export const start = () => {
+export const START_GAME = "server/START_GAME"
+export const startGame = () => {
     return {
-        type: START,
+        type: START_GAME,
     }
 }
 

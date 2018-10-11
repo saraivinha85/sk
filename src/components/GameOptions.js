@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import {start} from '../actions/game'
+import {startGame} from '../actions/game'
 
 class GameOptions extends Component {
     handleStart = () => {
@@ -28,7 +28,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        start: () => {dispatch(start())},       
+        start: () => {dispatch(startGame())},       
         dispatch
     }
 }
