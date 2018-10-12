@@ -10,7 +10,7 @@ import Card from './Card'
 import { placeBet } from '../actions/round'
 
 class Table extends React.Component {
-    buildCardsInTable = () => {
+    renderCenterCards = () => {
         return this.props.table.map(c =>
             <Grid key={c} item>
                 <Card id={c} disabled />
@@ -31,20 +31,42 @@ class Table extends React.Component {
         this.props.placeBet(bet)
     }
 
+    renderPlayers = () => {
+        const {players} = this.props
+
+        const radius = 250
+        const width = 885
+        const height = 570 
+        let angle = 360
+        const step = 2 * Math.PI / 6 //players.length
+
+        return [1,2,3,4,5,6].map(function() {
+            const x = Math.round(width/2 + radius * Math.cos(angle) - 50/2)
+            const y = Math.round(height/2 + radius * Math.sin(angle) - 100/2)
+            angle += step
+            return <div style={{position: 'absolute', left: `${x}px`, top: `${y}px`}}><Card id={67} disabled/></div>
+        })
+
+    }
+
     render() {
         const { classes, hasBet } = this.props
         const bets = this.renderBets()
 
         return (
-            <Grid className={classes.root} item xs={12}>
+            <div className={classes.root}>
+                {this.renderPlayers()}
+            </div>
+        )
+           {/*  <Grid className={classes.root} item xs={12}>
                 <Grid
                     container
                     justify="center"
                     spacing={8}
                 >
-                    {this.buildCardsInTable()}
+                    {this.buildCenterCards()}
                 </Grid>
-                            
+
                 <Grid
                     container
                     justify="center"
@@ -60,8 +82,10 @@ class Table extends React.Component {
                 >
                     <Hand />
                 </Grid>
+                
             </Grid>
-        )
+*/}
+        
     }
 }
 
@@ -80,6 +104,7 @@ const mapStateToProps = (state) => {
     return {
         hand: state.hand.cards,
         table: state.round.cards,
+        players: state.game.players,
         hasBet: state.round.bets.length > 0
     }
 }
