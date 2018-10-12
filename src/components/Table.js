@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
+import Hand from './Hand'
 
 import Card from './Card'
 import { placeBet } from '../actions/round'
@@ -31,11 +32,11 @@ class Table extends React.Component {
     }
 
     render() {
-        const { hasBet } = this.props
+        const { classes, hasBet } = this.props
         const bets = this.renderBets()
 
         return (
-            <Grid item xs={12}>
+            <Grid className={classes.root} item xs={12}>
                 <Grid
                     container
                     justify="center"
@@ -43,7 +44,7 @@ class Table extends React.Component {
                 >
                     {this.buildCardsInTable()}
                 </Grid>
-
+                            
                 <Grid
                     container
                     justify="center"
@@ -51,12 +52,28 @@ class Table extends React.Component {
                 >
                     {!hasBet && bets}
                 </Grid>
+                <Grid
+                    className={classes.hand}
+                    container
+                    justify='center'
+                    spacing={Number(8)}
+                >
+                    <Hand />
+                </Grid>
             </Grid>
         )
     }
 }
 
 const styles = {
+    root: {
+        height: '60vh',
+        position: 'relative'
+    },
+    hand: {
+        bottom: '0px',
+        position: 'absolute'
+    }
 }
 
 const mapStateToProps = (state) => {

@@ -9,7 +9,6 @@ import GameOptions from './GameOptions'
 import GameQueue from './Queue'
 import Players from './Players'
 import Chat from './Chat'
-import Hand from './Hand'
 import GameTable from './Table'
 
 class Layout extends Component {
@@ -24,7 +23,7 @@ class Layout extends Component {
                     </Grid>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            {isGameStarted? <div><GameTable /><Hand/></div>: <GameQueue />}
+                            {isGameStarted? <GameTable />: <GameQueue />}
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>

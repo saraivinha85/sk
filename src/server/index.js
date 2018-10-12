@@ -131,7 +131,8 @@ io.on('connection', (socket) => {
                     return
                 }
                 console.log('Played card', action.payload.id)
-                return state.play(action.payload.id).then(() => {
+                return state.play(getPlayerIndex(socket, state.players), action.payload.id).then(() => {
+                    console.log(state.round.set.plays)
                     io.emit('action', {type: 'CARD_PLAYED', payload: state.round.set.plays})
                     if (state.is('waitingPlays')) {
                         state.token = Uuid.v4()
