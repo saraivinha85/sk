@@ -37,8 +37,8 @@ class Table extends React.Component {
         const radius = 250
         const width = 885
         const height = 570 
-        let angle = 360
-        const step = 2 * Math.PI / 6 //players.length
+        let angle = 0
+        const step = Math.PI / (players.length - 1)
 
         return [1,2,3,4,5,6].map(function() {
             const x = Math.round(width/2 + radius * Math.cos(angle) - 50/2)
@@ -46,7 +46,6 @@ class Table extends React.Component {
             angle += step
             return <div style={{position: 'absolute', left: `${x}px`, top: `${y}px`}}><Card id={67} disabled/></div>
         })
-
     }
 
     render() {
