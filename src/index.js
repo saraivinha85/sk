@@ -9,6 +9,7 @@ import createSocketIOMiddleware from 'redux-socket.io'
 
 import logger from 'redux-logger'
 
+import './index.css'
 import Layout from './components/Layout'
 import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker'
