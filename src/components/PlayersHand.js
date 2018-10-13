@@ -68,7 +68,7 @@ class PlayersHand extends React.Component {
                 placement = [{x: 0, y: height/2 - w/2}, {x: 0, y: 0}, {x: width - w, y: 0}, {x: width - w, y: height/2 - w/2}]
                 break
             case 5:
-                placement = [{x: 0, y: height/2 - w/2}, {x: 0, y: 0}, {x: width/2 - w/2, y: 0}, {x: width - w, y: 0}, {x: width - w, y: height/2 - w/2}]
+                placement = [{x: 0, y: height/2 - w/2}, {x: width/4 - w/2, y: 0}, {x: width/2 - w/2, y: 0}, {x: width - width/4 - w, y: 0}, {x: width - w, y: height/2 - w/2}]
 
         }
 
