@@ -76,26 +76,35 @@ class PlayersHand extends React.Component {
 
         const radius = 70
         const cwidth = 40
-        const cheight = 40 + 40
+        const cheight = 58
         const cardWidth = 50
         const cardHeight = 70
-        let angle = 0
+        //let angle = 0
         const step = (Math.PI) / (cards.length -1)
 
-        const renderCards = cards.map((c) => {
+    //     transform: rotate(30deg);
+    // transform-origin: 50% 100%;
+
+        const renderCards = (angle=0) => {return cards.map((c) => {
             const x = Math.round(cwidth/2 + radius * Math.cos(angle) - cardWidth/2);
             const y = Math.round(cheight/2 + radius * Math.sin(angle) - cardHeight/2);
             angle += step
             return <div style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }}>
                 <Card disabled id={67}/>
             </div>
-        })
+        })}
 
         return sortedPlayers.map((p, idx) => {
+            // const angle = placement[idx].x===0
+            //     ? -Math.PI/2
+            //     : placement[idx].x === width - w
+            //     ? Math.PI/2
+            //     : 0
+
             return <div style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
                 <Avatar className={classes.avatar} src={p.photo}/>
                 <div className={classes.hiddenHand}>
-                    {renderCards}
+                    {renderCards()}
                 </div>
             </div>
         })
