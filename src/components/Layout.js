@@ -19,28 +19,34 @@ class Layout extends Component {
             <div className={classes.root}>
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
-                        <Paper className={classes.paper}>Skull King</Paper>
+                        <StyledPaper className={classes.paper}>Skull King</StyledPaper>
                     </Grid>
                     <Grid item xs={12}>
-                        <Paper className={classes.paper}>
-                            {isGameStarted? <GameTable />: <GameQueue />}
-                        </Paper>
+                        <StyledPaper className={classes.paper}>
+                            {true? <GameTable />: <GameQueue />}
+                        </StyledPaper>
                     </Grid>
                     <Grid item xs={3}>
-                        <Paper className={classes.paper}>
+                        <StyledPaper className={classes.paper}>
                             <Players />
-                        </Paper>
+                        </StyledPaper>
                     </Grid>
                     <Grid item xs={9}>
-                        <Paper className={classes.paper}>
+                        <StyledPaper className={classes.paper}>
                             <Chat />
-                        </Paper>
+                        </StyledPaper>
                     </Grid>                    
                 </Grid>
             </div>
         )
     }
 }
+
+const StyledPaper = withStyles({
+    root: {
+        backgroundColor: '#fafafa14',
+    }
+})(Paper)
 
 const styles = theme => ({
     root: {
@@ -49,7 +55,7 @@ const styles = theme => ({
     paper: {
         padding: theme.spacing.unit * 2,
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        color: '#ffffff9c',
     },
 })
 

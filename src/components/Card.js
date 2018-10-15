@@ -47,8 +47,9 @@ class Card extends React.Component {
 
 const styles = theme => ({
     paper: {
-        height: 140,
-        width: 100,
+        height: 70,
+        width: 50,
+        color: 'black'
     }
 })
 

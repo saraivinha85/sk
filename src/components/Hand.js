@@ -46,10 +46,6 @@ const styles = theme => ({
     root: {
         flexGrow: 1,
     },
-    paper: {
-        height: 140,
-        width: 100,
-    },
     control: {
         padding: theme.spacing.unit * 2,
     },
@@ -57,7 +53,7 @@ const styles = theme => ({
 
 const mapStateToProps = (state) => {
     return {
-        cards: state.hand.cards,
+        cards: [1,2,3]//state.hand.cards,
     }
 }
 

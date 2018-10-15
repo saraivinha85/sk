@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import ContainerDimensions from 'react-container-dimensions'
 
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
@@ -8,6 +9,7 @@ import Hand from './Hand'
 
 import Card from './Card'
 import { placeBet } from '../actions/round'
+import PlayersHand from './PlayersHand'
 
 class Table extends React.Component {
     renderCenterCards = () => {
@@ -32,19 +34,30 @@ class Table extends React.Component {
     }
 
     renderPlayers = () => {
-        const {players} = this.props
+        const {players, playerId} = this.props
 
+        //const otherPlayers = players.filter((p)=>p.id!==playerId)
+        const otherPlayers = [
+            {name: 'p1',
+            photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'},
+            {name: 'p2',
+            photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'},
+        ]
+
+        const x = this.table
         const radius = 250
         const width = 885
         const height = 570 
         let angle = 0
-        const step = Math.PI / (players.length - 1)
+        const step = -Math.PI / ( otherPlayers.length - 1)
 
-        return [1,2,3,4,5,6].map(function() {
+        return otherPlayers.map((p) => {
             const x = Math.round(width/2 + radius * Math.cos(angle) - 50/2)
             const y = Math.round(height/2 + radius * Math.sin(angle) - 100/2)
             angle += step
-            return <div style={{position: 'absolute', left: `${x}px`, top: `${y}px`}}><Card id={67} disabled/></div>
+            return <div style={{position: 'absolute', left: `${x}px`, top: `${y}px`}}><Avatar
+            src={p.photo}
+        /></div>
         })
     }
 
@@ -53,8 +66,13 @@ class Table extends React.Component {
         const bets = this.renderBets()
 
         return (
-            <div className={classes.root}>
-                {this.renderPlayers()}
+            <div ref={r=>this.table=r} className={classes.root}>
+                <ContainerDimensions>
+                    <PlayersHand />
+                </ContainerDimensions>
+                <div className={classes.hand}>
+                    <Hand/>
+                </div>
             </div>
         )
            {/*  <Grid className={classes.root} item xs={12}>
@@ -91,16 +109,18 @@ class Table extends React.Component {
 const styles = {
     root: {
         height: '60vh',
-        position: 'relative'
+        position: 'relative',
     },
     hand: {
         bottom: '0px',
-        position: 'absolute'
+        position: 'absolute',
+        width: '100%'
     }
 }
 
 const mapStateToProps = (state) => {
     return {
+        playerId: state.game.id,
         hand: state.hand.cards,
         table: state.round.cards,
         players: state.game.players,

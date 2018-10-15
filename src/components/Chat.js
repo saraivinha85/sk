@@ -49,7 +49,7 @@ class Chat extends Component {
 
         return (
             <div>
-                <ListSubheader component="div">Chat</ListSubheader>
+                <ListSubheader className={classes.header} component="div">Chat</ListSubheader>
                 <div style={{height: '200px', overflow: 'auto'}}>
                     <Table className={classes.table}>
                         <TableBody>
@@ -73,7 +73,9 @@ class Chat extends Component {
 }
 
 const styles = {
-
+    header: {
+        color: '#ffffff9c'
+    },
 }
 
 const mapStateToProps = (state) => {
