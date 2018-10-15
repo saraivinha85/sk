@@ -39,7 +39,7 @@ class Card extends React.Component {
                 onMouseUp={this.handleCardSelection}
                 elevation={this.state.elevation}
             >
-                {this.props.id}
+                <img style={{width: '100%', height: '100%'}} src='/back.png'/>
             </Paper>
         )
     }

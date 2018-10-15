@@ -12,40 +12,7 @@ import { placeBet } from '../actions/round'
 class PlayersHand extends React.Component {
 
     renderPlayers = () => {
-        const { width, height, classes } = this.props
-
-        //const otherPlayers = players.filter((p)=>p.id!==playerId)
-        const players = [
-
-
-            {
-                name: 'p2', id: '2',
-                photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'
-            },
-            {
-                name: 'p2', id: '4',
-                photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'
-            },
-            {
-                name: 'p1', id: '3',
-                photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'
-            },
-            {
-                name: 'p1', id: '5',
-                photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'
-            },
-            {
-                name: 'p1', id: '1',
-                photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'
-            },
-            {
-                name: 'p1', id: '6',
-                photo: 'http://downloads.oppserver.net/linux/tux/tux57.png'
-            },
-        ]
-
-        const playerId = '1'
-
+        const { width, height, players, playerId, classes, hand } = this.props
 
         const playerIndex = players.findIndex((p) => p.id === playerId)
         const sortedPlayers = players.slice(playerIndex + 1, players.length + 1).concat(players.slice(0, playerIndex))
@@ -72,18 +39,13 @@ class PlayersHand extends React.Component {
 
         }
 
-        const cards = [1,2,3,4,5]
-
+        const numberCards = hand.length 
         const radius = 70
         const cwidth = 40
         const cheight = 58
         const cardWidth = 50
         const cardHeight = 70
-        //let angle = 0
-        const step = (Math.PI) / (cards.length -1)
-
-    //     transform: rotate(30deg);
-    // transform-origin: 50% 100%;
+        const step = (Math.PI) / (numberCards -1)
 
         const renderCards = (count) => {
             const isEven = count % 2 === 0? true : false
@@ -114,16 +76,11 @@ class PlayersHand extends React.Component {
         }
 
         return sortedPlayers.map((p, idx) => {
-            // const angle = placement[idx].x===0
-            //     ? -Math.PI/2
-            //     : placement[idx].x === width - w
-            //     ? Math.PI/2
-            //     : 0
-
+            const handClass = placement[idx].x === 0? classes.hiddenHandLeft : placement[idx].x === width - w? classes.hiddenHandRight : classes.hiddenHandTop
             return <div style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
                 <Avatar className={classes.avatar} src={p.photo}/>
-                <div className={classes.hiddenHand}>
-                    {renderCards(10)}
+                <div className={handClass} >
+                    {renderCards(numberCards)}
                 </div>
             </div>
         })
@@ -154,11 +111,23 @@ const styles = {
         margin: 0,
         backgroundColor: '#00000069'
     },
-    'hiddenHand': {
+    'hiddenHandTop': {
         position: 'relative',
         left: '-5px',
         top: '35px'
         //display: 'inline-flex'
+    },
+    'hiddenHandRight': {
+        position: 'relative',
+        transform: 'rotateZ(90deg)',
+        right: '60px',
+        top: '-10px'
+    },
+    'hiddenHandLeft': {
+        position: 'relative',
+        transform: 'rotateZ(-90deg)',
+        left: '60px',
+        top: '-10px'
     }
 }
 

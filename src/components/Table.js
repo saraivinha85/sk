@@ -108,7 +108,7 @@ class Table extends React.Component {
 
 const styles = {
     root: {
-        height: '60vh',
+        height: '85vh',
         position: 'relative',
     },
     hand: {

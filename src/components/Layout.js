@@ -23,7 +23,7 @@ class Layout extends Component {
                     </Grid>
                     <Grid item xs={12}>
                         <StyledPaper className={classes.paper}>
-                            {true? <GameTable />: <GameQueue />}
+                            {isGameStarted? <GameTable />: <GameQueue />}
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={3}>

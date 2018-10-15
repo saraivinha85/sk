@@ -19,7 +19,7 @@ const game = (state=INITIAL_STATE, action) => {
         case 'GAME_ENDED':
             return {...state, started: false}
         case 'NEW_COMMENT':
-            return {...state, comments: [...state.comments, action.payload]}
+            return {...state, comments: [action.payload, ...state.comments]}
         default:
             return state
     }

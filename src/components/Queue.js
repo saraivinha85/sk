@@ -66,10 +66,13 @@ class Queue extends Component {
 const StyledChip = withStyles({
     root: {
         marginTop: 0,
-        marginBottom: 0
+        marginBottom: 0,
+        backgroundColor: '#00000042',
+        color: 'unset'
     },
     deleteIcon: {
         margin: '0px',
+        color: 'unset'
     }
 })(Chip)
 

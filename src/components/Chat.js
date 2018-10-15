@@ -32,13 +32,14 @@ class Chat extends Component {
     }
 
     renderComments = () => {
+        const {classes} = this.props
         return this.props.comments.map(row => {
             return (
                 <TableRow key={row.ts}>
-                    <TableCell style={{ width: '20%' }}>
+                    <TableCell className={classes.name}>
                         {row.from}<p />{row.ts}
                     </TableCell>
-                    <TableCell>{row.text}</TableCell>
+                    <TableCell className={classes.message}>{row.text}</TableCell>
                 </TableRow>
             )
         })
@@ -59,9 +60,11 @@ class Chat extends Component {
                 </div>
                 <TextField
                         id="standard-full-width"
-                        label="Comment"
                         fullWidth
                         variant='filled'
+                        InputProps={{
+                            className: classes.input
+                        }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -76,6 +79,20 @@ const styles = {
     header: {
         color: '#ffffff9c'
     },
+    name: {
+        fontSize: '12px',
+        fontWeight: 600,
+        color: 'unset',
+        width: '20%'
+    },
+    message: {
+        fontSize: '12px',
+        fontWeight: 500,
+        color: 'unset'
+    },
+    input: {
+        color: 'unset'
+    }
 }
 
 const mapStateToProps = (state) => {
