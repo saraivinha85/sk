@@ -77,7 +77,7 @@ class PlayersHand extends React.Component {
 
         return sortedPlayers.map((p, idx) => {
             const handClass = placement[idx].x === 0? classes.hiddenHandLeft : placement[idx].x === width - w? classes.hiddenHandRight : classes.hiddenHandTop
-            return <div style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
+            return <div key={p.id} style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
                 <Avatar className={classes.avatar} src={p.photo}/>
                 <div className={handClass} >
                     {renderCards(numberCards)}

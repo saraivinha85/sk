@@ -16,7 +16,7 @@ export const expressAuth = (passport) => {
     })
 
     const strategy = googleStrategy() 
-    //setProxy(strategy)
+    setProxy(strategy)
     passport.use(strategy)
 }
 

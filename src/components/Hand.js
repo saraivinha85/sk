@@ -53,7 +53,7 @@ const styles = theme => ({
 
 const mapStateToProps = (state) => {
     return {
-        cards: [1,2,3]//state.hand.cards,
+        cards: state.hand.cards,
     }
 }
 

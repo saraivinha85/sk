@@ -31,15 +31,17 @@ class Card extends React.Component {
     }
 
     render() {
+        const {classes, id} = this.props
         return (
             <Paper
-                className={this.props.classes.paper}
+                className={classes.paper}
                 onMouseEnter={this.handleOnHover}
                 onMouseLeave={this.handleOnLeave}
                 onMouseUp={this.handleCardSelection}
                 elevation={this.state.elevation}
             >
-                <img style={{width: '100%', height: '100%'}} src='/back.png'/>
+                {id}
+                <img style={{width: '100%', height: '100%'}} src={`/assets/${id}.png`}/>
             </Paper>
         )
     }
