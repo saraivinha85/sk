@@ -28,7 +28,7 @@ socketioAuth(io)
 const isAuthenticated = (req, res, next) => { return req.isAuthenticated()? next() : res.redirect('/auth/google') }
 
 app.get('/', isAuthenticated, (req, res) => {
-    //res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
+    // res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
     res.writeHead(302, {
         Location: 'http://localhost:3000/'
     })
@@ -91,7 +91,7 @@ io.on('connection', (socket) => {
                         return socket.emit('action', {type: 'ERROR', payload: "Can't join the game queue!"})
                     })
             case 'server/SUBMIT_COMMENT':
-                return io.emit('action', {type: 'NEW_COMMENT', payload: {from: socket.request.user.displayName, text: action.payload, ts: new Date().toJSON()}})
+                return io.emit('action', {type: 'NEW_COMMENT', payload: {from: socket.request.user.displayName, photo: socket.request.user.image, text: action.payload, ts: new Date().toJSON()}})
             case 'server/LEAVE_QUEUE':
                 return state.leave(socket)
                     .then(() => {

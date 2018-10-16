@@ -9,6 +9,7 @@ import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
+import Avatar from '@material-ui/core/Avatar'
 
 import { submitComment } from '../actions/game'
 
@@ -36,8 +37,14 @@ class Chat extends Component {
         return this.props.comments.map(row => {
             return (
                 <TableRow key={row.ts}>
+                    <TableCell className={classes.avatar}>
+                        <Avatar src={row.photo}/>
+                    </TableCell>
                     <TableCell className={classes.name}>
-                        {row.from}<p />{row.ts}
+                        {row.from}
+                    </TableCell>
+                    <TableCell className={classes.name}>
+                        {row.ts}
                     </TableCell>
                     <TableCell className={classes.message}>{row.text}</TableCell>
                 </TableRow>
@@ -80,15 +87,21 @@ const styles = {
         color: '#ffffff9c'
     },
     name: {
-        fontSize: '12px',
-        fontWeight: 600,
+        fontSize: '15px',
         color: 'unset',
-        width: '20%'
+        width: '20%',
+        borderBottom: '1px solid rgba(224, 224, 224, 0.19)',
+        fontFamily: 'cursive'
     },
     message: {
-        fontSize: '12px',
-        fontWeight: 500,
-        color: 'unset'
+        fontSize: '15px',
+        color: 'unset',
+        borderBottom: '1px solid rgba(224, 224, 224, 0.19)',
+        fontFamily: 'cursive'
+    },
+    avatar: {
+        borderBottom: '1px solid rgba(224, 224, 224, 0.19)',
+        width: '1%'
     },
     input: {
         color: 'unset'
