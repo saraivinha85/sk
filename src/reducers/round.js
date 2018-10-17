@@ -15,7 +15,9 @@ const round = (state = INITIAL_STATE, action) => {
         case 'BETS_IN_PLACE':
             return { ...state, bets: action.payload }
         case 'ROUND_STARTED':
-            return { ...state, index: action.payload }
+            return { ...state, index: action.payload, cards: [], bets: [], token: null, canPlay: false }
+        case 'SET_ENDED':
+            return { ...state, cards: [] }
         case 'PLAY':
             return { ...state, canPlay: true, token: action.payload }
         case 'WAIT_PLAY':

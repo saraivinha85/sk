@@ -146,9 +146,37 @@ io.on('connection', (socket) => {
                         state.players.filter((p)=>p.id!==nextPlayer.id).forEach((p)=>{
                             p.emit('action', {type: 'WAIT_PLAY'})
                         })
-                    } else {
-                        return
-                    }
+                    } else if (state.is('setEnded')) {
+                        return state.nextSet().then(() => {
+                            if (state.is('roundEnded')) {
+                                io.emit('action', {type: 'SCORE', payload: state.score})
+                                return state.nextRound()
+                            }
+                            io.emit('action', {type: 'SET_ENDED', payload: state.round.set.index})
+                            state.token = Uuid.v4()
+                            const firstPlayer = state.players[state.first]
+                            firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
+                            state.players.filter((p)=>p.id!==firstPlayer.id).forEach((p)=>{
+                                p.emit('action', {type: 'WAIT_PLAY'})
+                            })
+                            return state.allowPlay() 
+                        }).then(() => {
+                            if (state.is('roundStarted')) {
+                                io.emit('action', {type: 'ROUND_STARTED', payload: state.round.index})
+                                return state.deal()
+                            }
+                        }).then(() => {
+                            if (state.is('waitingBets')) {
+                                return dealCardsForRound(state.players, state.round.index + 1)
+                            }
+                        }).catch((error) => {
+                                    console.log(error)
+                                    return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
+
+                        })
+                    } 
+
+                    return
                 })
             default:
                 return
