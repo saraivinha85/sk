@@ -12,7 +12,7 @@ import { placeBet } from '../actions/round'
 class PlayersHand extends React.Component {
 
     renderPlayers = () => {
-        const { width, height, players, playerId, classes, hand } = this.props
+        const { width, height, players, playerId, classes, table, round, set } = this.props
 
         const playerIndex = players.findIndex((p) => p.id === playerId)
         const sortedPlayers = players.slice(playerIndex + 1, players.length + 1).concat(players.slice(0, playerIndex))
@@ -38,14 +38,6 @@ class PlayersHand extends React.Component {
                 placement = [{x: 0, y: height/2 - w/2}, {x: width/4 - w/2, y: 0}, {x: width/2 - w/2, y: 0}, {x: width - width/4 - w, y: 0}, {x: width - w, y: height/2 - w/2}]
 
         }
-
-        const numberCards = hand.length 
-        const radius = 70
-        const cwidth = 40
-        const cheight = 58
-        const cardWidth = 50
-        const cardHeight = 70
-        const step = (Math.PI) / (numberCards -1)
 
         const renderCards = (count) => {
             const isEven = count % 2 === 0? true : false
@@ -77,10 +69,12 @@ class PlayersHand extends React.Component {
 
         return sortedPlayers.map((p, idx) => {
             const handClass = placement[idx].x === 0? classes.hiddenHandLeft : placement[idx].x === width - w? classes.hiddenHandRight : classes.hiddenHandTop
+            const pIndex = players.indexOf(p)
+            const cardsLeft = table[pIndex] !== null? 1: 0
             return <div key={p.id} style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
                 <Avatar className={classes.avatar} src={p.photo}/>
                 <div className={handClass} >
-                    {renderCards(numberCards)}
+                    {renderCards(round + 1 - set - cardsLeft)}
                 </div>
             </div>
         })
@@ -113,20 +107,20 @@ const styles = {
     },
     'hiddenHandTop': {
         position: 'relative',
-        left: '-5px',
+        left: '-25px',
         top: '35px'
         //display: 'inline-flex'
     },
     'hiddenHandRight': {
         position: 'relative',
         transform: 'rotateZ(90deg)',
-        right: '60px',
+        right: '80px',
         top: '-10px'
     },
     'hiddenHandLeft': {
         position: 'relative',
         transform: 'rotateZ(-90deg)',
-        left: '60px',
+        left: '80px',
         top: '-10px'
     }
 }
@@ -136,6 +130,8 @@ const mapStateToProps = (state) => {
         playerId: state.game.id,
         hand: state.hand.cards,
         table: state.round.cards,
+        set: state.round.set,
+        round: state.round.index,
         players: state.game.players,
     }
 }

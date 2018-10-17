@@ -40,7 +40,6 @@ class Card extends React.Component {
                 onMouseUp={this.handleCardSelection}
                 elevation={this.state.elevation}
             >
-                {id}
                 <img style={{width: '100%', height: '100%'}} src={`/assets/${id}.png`}/>
             </Paper>
         )
@@ -49,9 +48,10 @@ class Card extends React.Component {
 
 const styles = theme => ({
     paper: {
-        height: 70,
-        width: 50,
-        color: 'black'
+        height: 140,
+        width: 90,
+        color: 'black',
+        backgroundColor: 'transparent'
     }
 })
 

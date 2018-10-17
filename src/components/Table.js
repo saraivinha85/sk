@@ -23,9 +23,7 @@ class Table extends React.Component {
     renderBets = () => {
         const {hand, classes} = this.props
         return [...Array(hand.length + 1).keys()].map((t) => {
-            return <Grid className={classes.betsGrid} key={t} item>
-                <Avatar className={classes.bet} onClick={() => { this.handleBet(t) }}>{`${t}`}</Avatar>
-            </Grid>
+                return <Avatar className={classes.bet} onClick={() => { this.handleBet(t) }}>{`${t}`}</Avatar>
         })
     }
 
@@ -73,15 +71,15 @@ const styles = {
     },
     betsContainer: {
         display: 'inline-flex',
-        alignItems: 'center'
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        alignSelf: 'center',
+        maxWidth: '50%',
+        justifyContent: 'center'
     },
     centerCards: {
         display: 'inline-flex',
         alignItems: 'center'
-    },
-
-    betsGrid: {
-        margin: '5px'
     },
     bet: {
         backgroundColor: '#0000002b',

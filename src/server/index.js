@@ -114,7 +114,8 @@ io.on('connection', (socket) => {
                 })
             case 'server/PLACE_BET':
                 return state.bet(getPlayerIndex(socket, state.players), action.payload).then(() => {
-                    if (state.is('setStarted')) {                        
+                    if (state.is('setStarted')) {
+                        io.emit('action', {type: 'SET_STARTED', payload: state.round.set.index})                        
                         io.emit('action', {type: 'BETS_IN_PLACE', payload: state.round.bets})
                         state.token = Uuid.v4()
                         const firstPlayer = state.players[state.first]
