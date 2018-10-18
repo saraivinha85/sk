@@ -12,7 +12,7 @@ import { placeBet } from '../actions/round'
 class PlayersHand extends React.Component {
 
     renderPlayers = () => {
-        const { width, height, players, playerId, classes, table, round, set } = this.props
+        const { width, height, players, playerId, classes, table, hand } = this.props
 
         const playerIndex = players.findIndex((p) => p.id === playerId)
         const sortedPlayers = players.slice(playerIndex + 1, players.length + 1).concat(players.slice(0, playerIndex))
@@ -71,10 +71,12 @@ class PlayersHand extends React.Component {
             const handClass = placement[idx].x === 0? classes.hiddenHandLeft : placement[idx].x === width - w? classes.hiddenHandRight : classes.hiddenHandTop
             const pIndex = players.indexOf(p)
             const cardsLeft = table[pIndex] !== null? 1: 0
+            const played = table[playerIndex] !== null? 1: 0
+            const count = hand.length - cardsLeft + played
             return <div key={p.id} style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
                 <Avatar className={classes.avatar} src={p.photo}/>
                 <div className={handClass} >
-                    {renderCards(round + 1 - set - cardsLeft)}
+                    {renderCards(count<0? 0: count)}
                 </div>
             </div>
         })
