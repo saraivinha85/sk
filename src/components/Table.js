@@ -42,13 +42,17 @@ class Table extends React.Component {
                 <ContainerDimensions>
                     <PlayersHand />
                 </ContainerDimensions>
-                    <Fade in={table.length!==0} timeout={1000}>
-                        <div className={classes.centerCards}>
+                <Fade in={table.length!==0} timeout={1000}>
+                    <div className={classes.centerCards}>
                         {playedCards}
-                        </div>
-                    </Fade>
-                {!hasBet && <div className={classes.betsContainer}>
-                    {bets}
+                    </div>
+                </Fade>
+                {!hasBet &&
+                <div className={classes.betsContainer}>
+                    <h1>Place your bet</h1>
+                    <div className={classes.bets}>
+                        {bets}
+                    </div>
                 </div>}
                 <div className={classes.hand}>
                     <Hand/>
@@ -73,12 +77,18 @@ const styles = {
         width: '100%'
     },
     betsContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        display: 'flex'
+    },
+    bets: {
         display: 'inline-flex',
         flexWrap: 'wrap',
-        alignItems: 'center',
+        //alignItems: 'center',
         alignSelf: 'center',
-        maxWidth: '50%',
-        justifyContent: 'center'
+        //maxWidth: '50%',
+        //justifyContent: 'center'
     },
     centerCards: {
         display: 'inline-flex',

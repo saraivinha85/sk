@@ -6,6 +6,7 @@ import Random from 'random-array-generator'
 import Passport from 'passport'
 import Path from 'path'
 import Uuid from 'uuid'
+import Sleep from 'sleep'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 
@@ -148,10 +149,14 @@ io.on('connection', (socket) => {
                     } else if (state.is('setEnded')) {
                         return state.nextSet().then(() => {
                             if (state.is('roundEnded')) {
+                                Sleep.sleep(2)
                                 io.emit('action', {type: 'SCORE', payload: state.score})
                                 return state.nextRound()
                             }
+
+                            Sleep.sleep(2)
                             io.emit('action', {type: 'SET_ENDED', payload: state.round.set.index})
+                            
                             state.token = Uuid.v4()
                             const firstPlayer = state.players[state.first]
                             firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
