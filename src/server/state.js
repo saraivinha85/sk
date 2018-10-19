@@ -1,7 +1,6 @@
 import FSM from 'fsm-as-promised'
 
 import {trickScore, roundScore} from './score'
-import { func } from 'prop-types';
 
 const state = {
     players: [],

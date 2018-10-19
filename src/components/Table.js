@@ -5,8 +5,9 @@ import ContainerDimensions from 'react-container-dimensions'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
-import Hand from './Hand'
+import Fade from '@material-ui/core/Fade'
 
+import Hand from './Hand'
 import Card from './Card'
 import { placeBet } from '../actions/round'
 import PlayersHand from './PlayersHand'
@@ -32,7 +33,7 @@ class Table extends React.Component {
     }
 
     render() {
-        const { classes, hasBet } = this.props
+        const { classes, hasBet, table } = this.props
         const bets = this.renderBets()
         const playedCards = this.renderCenterCards()
 
@@ -41,9 +42,11 @@ class Table extends React.Component {
                 <ContainerDimensions>
                     <PlayersHand />
                 </ContainerDimensions>
-                <div className={classes.centerCards}>
-                    {playedCards}
-                </div>
+                    <Fade in={table.length!==0} timeout={1000}>
+                        <div className={classes.centerCards}>
+                        {playedCards}
+                        </div>
+                    </Fade>
                 {!hasBet && <div className={classes.betsContainer}>
                     {bets}
                 </div>}

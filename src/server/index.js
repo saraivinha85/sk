@@ -8,8 +8,6 @@ import Path from 'path'
 import Uuid from 'uuid'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
-import {calculateScore} from './score'
-import cardMap from '../cards'
 
 import state from './state'
 

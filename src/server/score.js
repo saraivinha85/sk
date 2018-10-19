@@ -1,4 +1,4 @@
-import cardMap from '../cards.json'
+import cardMap from '../cards'
 
 export const roundScore = (roundIndex, bets, tricks, bonus) => {
     return bets.map((b, idx) => {
