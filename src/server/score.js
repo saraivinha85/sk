@@ -12,8 +12,10 @@ export const roundScore = (roundIndex, bets, tricks, bonus) => {
     })
 }
 
-export const trickScore = (cards) => {
-    console.log(cards.map((c) => cardMap[c]))
+export const trickScore = (startIdx, cardsPlayed) => {
+    const cards = cardsPlayed.slice(startIdx + 1, cardsPlayed.length + 1)
+        .concat(cardsPlayed.slice(0, startIdx))
+    cards.unshift(cardsPlayed[startIdx])
 
     const sk = cards.find((c) => {return c === 0})
     const p = cards.find((c) => {return c > 0 && c < 7})

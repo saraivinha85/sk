@@ -65,7 +65,7 @@ FSM({
         },
         onentersetEnded: function (options) {
             console.log('Set', state.round.set.index, 'ended')
-            const trick = trickScore(this.round.set.plays)
+            const trick = trickScore(( state.first + 1 ) % state.players.length, this.round.set.plays)
             this.round.tricks[trick.winner] += 1
             this.round.bonus[trick.winner] += trick.bonus
             this.first = trick.winner

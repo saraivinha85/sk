@@ -10,6 +10,7 @@ import Uuid from 'uuid'
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 
 import state from './state'
+import cards from '../cards'
 
 const app = Express()
 expressAuth(Passport)
@@ -82,7 +83,9 @@ io.on('connection', (socket) => {
             case 'server/JOIN_QUEUE':
                 return state.join(socket)
                     .then(() => {
-                        return io.emit('action', {type: 'PLAYER_JOIN', payload: getPlayersInfo(state.players)})
+                        const playersInfo = getPlayersInfo(state.players)
+                        console.log("JOIN_QUEUE", playersInfo[state.players.indexOf(socket)])
+                        return io.emit('action', {type: 'PLAYER_JOIN', payload: playersInfo})
                     })
                     .catch((error) => {
                         console.log(error)
@@ -93,6 +96,7 @@ io.on('connection', (socket) => {
             case 'server/LEAVE_QUEUE':
                 return state.leave(socket)
                     .then(() => {
+                        console.log("LEAVE_QUEUE", socket.id, socker.request.user)
                         return io.emit('action', {type: 'PLAYER_LEAVE', payload: getPlayersInfo(state.players)})
                     })
                     .catch((error) => {
@@ -102,6 +106,7 @@ io.on('connection', (socket) => {
             case 'server/START_GAME':
                 return state.start().then(()=>{
                     io.emit('action', {type: 'ROUND_STARTED', payload: state.round.index})
+                    console.log("ROUND_STARTED", state.round.index)
                     return state.deal()
                 }).then(() => {
                     return dealCardsForRound(state.players, state.round.index + 1)
@@ -113,6 +118,8 @@ io.on('connection', (socket) => {
             case 'server/PLACE_BET':
                 return state.bet(getPlayerIndex(socket, state.players), action.payload).then(() => {
                     if (state.is('setStarted')) {
+                        console.log("BET", socket.id, socket.request.user.displayName, action.payload)
+                        console.log("SET_STARTED", state.round.set.index)
                         io.emit('action', {type: 'SET_STARTED', payload: state.round.set.index})                        
                         io.emit('action', {type: 'BETS_IN_PLACE', payload: state.round.bets})
                         state.token = Uuid.v4()
@@ -123,6 +130,7 @@ io.on('connection', (socket) => {
                         })
                         return state.allowPlay() 
                     } else {
+                        console.log("BET", socket.id, socket.request.user.displayName, action.payload)
                         return
                     }
                 }).catch((error) => {
@@ -131,9 +139,10 @@ io.on('connection', (socket) => {
                 })
             case 'server/PLAY_CARD':
                 if (action.payload.token !== state.token) {
+                    console.log('PLAY_CARD', socket.id, 'Invalid token!')
                     return
                 }
-                console.log('Played card', action.payload.id)
+                console.log('PLAY_CARD', socket.id, socket.request.user.displayName, cards[action.payload.id])
                 return state.play(getPlayerIndex(socket, state.players), action.payload.id).then(() => {
                     console.log(state.round.set.plays)
                     io.emit('action', {type: 'CARD_PLAYED', payload: state.round.set.plays})
@@ -146,14 +155,20 @@ io.on('connection', (socket) => {
                             p.emit('action', {type: 'WAIT_PLAY'})
                         })
                     } else if (state.is('setEnded')) {
+                        console.log("SET_ENDED", state.round.set.index)
                         return state.nextSet().then(() => {
                             if (state.is('roundEnded')) {
+                                console.log("ROUND_ENDED", state.round.index)
                                 io.emit('action', {type: 'SCORE', payload: state.score})
+                                console.log("SCORE", state.score)
+                                console.log("LAST TRICK WINNER", state.players[state.first].id, state.players[state.first].request.user.displayName)
                                 return state.nextRound()
                             }
+
                             io.emit('action', {type: 'SET_ENDED', payload: state.round.set.index})
                             state.token = Uuid.v4()
-                            const firstPlayer = state.players[state.first]
+                            const firstPlayer = state.players[(state.first+1)%state.players.length]
+                            console.log("TRICK WINNER", firstPlayer.id, firstPlayer.request.user.displayName)
                             firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
                             state.players.filter((p)=>p.id!==firstPlayer.id).forEach((p)=>{
                                 p.emit('action', {type: 'WAIT_PLAY'})
@@ -212,8 +227,8 @@ const getPlayersInfo = (players) => {
 const dealCardsForRound = (players, round) => {
     const cards = Random.randomArray({min: 0, max: 66, elements: round * players.length})
     players.forEach((c) => {
-        console.log(cards)
         const hand = cards.splice(0, round)
+        console.log('DEAL_CARDS', c.id, c.request.user.displayName, hand)
         c.emit('action', {type: 'DEAL_CARDS', payload: hand})
     })
 }
