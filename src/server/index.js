@@ -148,7 +148,6 @@ io.on('connection', (socket) => {
                     io.emit('action', {type: 'CARD_PLAYED', payload: state.round.set.plays})
                     if (state.is('waitingPlays')) {
                         state.token = Uuid.v4()
-                        state.first = ( state.first + 1 ) % state.players.length
                         const nextPlayer = state.players[state.first]
                         nextPlayer.emit('action', { type:'PLAY', payload: state.token })
                         state.players.filter((p)=>p.id!==nextPlayer.id).forEach((p)=>{

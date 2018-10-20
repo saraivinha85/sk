@@ -51,21 +51,18 @@ FSM({
             const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
             this.score = this.score.map((s, idx) => {return s + score[idx]})
         },
-        ondeal: function (options) {
-            console.log('Dealing', this.round.index + 1, 'cards')
-        },
         onbet: function (options) {
             this.round.bets[options.args[0]] = options.args[1]
         },
-        onenterwaitingBets: function (options) {
+        onenterwaitingPlays: function (options) {
+            state.first = ( state.first + 1 ) % state.players.length
         },
         onentersetStarted: function (options) {
             this.round.set.index += 1
             this.round.set.plays = new Array(this.players.length).fill(null)
         },
         onentersetEnded: function (options) {
-            console.log('Set', state.round.set.index, 'ended')
-            const trick = trickScore(( state.first + 1 ) % state.players.length, this.round.set.plays)
+            const trick = trickScore(state.first, this.round.set.plays)
             this.round.tricks[trick.winner] += 1
             this.round.bonus[trick.winner] += trick.bonus
             this.first = trick.winner
