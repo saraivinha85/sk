@@ -9,7 +9,7 @@ import Uuid from 'uuid'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 
-import state from './state'
+import State from './state'
 import cards from '../cards'
 
 const app = Express()
@@ -64,6 +64,8 @@ let SET_COUNT = 1
 
 let TRICKS = new Array(10).fill(null)
 
+let state = State()
+
 io.set('authorization', function (req, callback) {
     callback(null, req.isAuthenticated())
 })
@@ -71,6 +73,7 @@ io.set('authorization', function (req, callback) {
 io.on('connection', (socket) => {
     console.log("Socket connected: " + socket.id)
 
+    state = State()
     IO_CLIENTS.push(socket)
     const players = getCurrentPlayers()
     socket.emit('action', {type: 'USER_WELCOME', payload: socket.id})
@@ -203,9 +206,8 @@ io.on('connection', (socket) => {
         const idx = IO_CLIENTS.indexOf(socket)
         IO_CLIENTS.splice(idx, 1)
         const players = getCurrentPlayers()
-        if(LEADER === socket.id && players.length > 0) {
-            LEADER = players[0].id 
-        }
+        
+        
 
         if (players.length>0) {
             io.emit('action', {type: 'USER_LEFT', payload: {players: players, leader: LEADER}})

@@ -2,7 +2,7 @@ import FSM from 'fsm-as-promised'
 
 import {trickScore, roundScore} from './score'
 
-const state = {
+let s = {
     players: [],
     first: null,
     round: {
@@ -18,7 +18,7 @@ const state = {
     score: []
 }
 
-FSM({
+let fsm = {
     initial: 'lobby',
     final: 'lobby',
     events: [
@@ -61,8 +61,9 @@ FSM({
             this.round.set.plays = new Array(this.players.length).fill(null)
         },
         onentersetEnded: function (options) {
-            const trick = trickScore(state.first, this.round.set.plays)
-            console.log("score", state.first, this.round.set.plays, trick)
+            console.log("score", this.first, this.round.set.plays)
+            const trick = trickScore(this.first, this.round.set.plays)
+            console.log("score", this.first, this.round.set.plays, trick)
             this.round.tricks[trick.winner] += 1
             this.round.bonus[trick.winner] += trick.bonus
             this.first = trick.winner
@@ -73,7 +74,13 @@ FSM({
         onnextSet: function (option) {
         }
     }
-}, state)
+}
+
+export const state = () => {
+    let st =  Object.assign({}, s)
+    let sm =  Object.assign({}, fsm)
+    return new FSM(sm, st)
+}
 
 export default state 
 

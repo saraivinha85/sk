@@ -9,7 +9,7 @@ test('With all flags, first flag should win', () => {
 })
 
 test('Test', () => {
-    const score = trickScore(1,[32,5])
+    const score = trickScore(1,[58,55])
     expect(score).toEqual({
         winner: 1,
         bonus: 0
