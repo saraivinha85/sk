@@ -228,7 +228,7 @@ const getPlayersInfo = (players) => {
 }
 
 const dealCardsForRound = (players, round) => {
-    const cards = Random.randomArray({min: 0, max: 66, elements: round * players.length})
+    const cards = Random.randomArray({min: 0, max: 65, elements: round * players.length})
     players.forEach((c) => {
         const hand = cards.splice(0, round)
         console.log('DEAL_CARDS', c.id, c.request.user.displayName, hand)
