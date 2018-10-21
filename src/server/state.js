@@ -2,7 +2,7 @@ import FSM from 'fsm-as-promised'
 
 import {trickScore, roundScore} from './score'
 
-let s = {
+const s = {
     players: [],
     first: null,
     round: {
@@ -18,7 +18,7 @@ let s = {
     score: []
 }
 
-let fsm = {
+const fsm = {
     initial: 'lobby',
     final: 'lobby',
     events: [
@@ -76,10 +76,14 @@ let fsm = {
     }
 }
 
+const clone = (obj) => {
+    return JSON.parse(JSON.stringify(obj))
+}
+
 export const state = () => {
-    let st =  Object.assign({}, s)
-    let sm =  Object.assign({}, fsm)
-    return new FSM(sm, st)
+    let st = clone(s)
+    console.log('New state', st)
+    return FSM(fsm, st)
 }
 
 export default state 
