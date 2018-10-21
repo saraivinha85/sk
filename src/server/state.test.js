@@ -29,10 +29,10 @@ test('Full game state', () => {
     }).then(() => {
         expect(state.current).toEqual('waitingBets')
         expect(state.round.bets).toEqual([1, null, 0])
-        return state.bet(1, 1)
+        return state.bet(1, 0)
     }).then(() => {
         expect(state.current).toEqual('setStarted')
-        expect(state.round.bets).toEqual([1, 1, 0])
+        expect(state.round.bets).toEqual([1, 0, 0])
         expect(state.round.set.index).toEqual(0)
         return state.allowPlay()
     }).then(() => {
@@ -53,6 +53,36 @@ test('Full game state', () => {
         expect(state.round.tricks).toEqual([0,0,1])
         expect(state.first).toEqual(2)
         return state.nextSet()
+    }).then(() => {
+        expect(state.current).toEqual('roundEnded')
+        expect(state.score).toEqual([-10, 10, -10])
+        expect(state.round.index).toEqual(0)
+        expect(state.first).toEqual(2)
+        return state.nextRound()
+    }).then(() => {
+        expect(state.current).toEqual('roundStarted')
+        expect(state.round.index).toEqual(1)
+        return state.deal()
+    }).then(() => {
+        expect(state.current).toEqual('waitingBets')
+        return state.bet(1, 1)
+    }).then(() => {
+        expect(state.current).toEqual('waitingBets')
+        expect(state.round.bets).toEqual([null,1,null])
+        return state.bet(2, 0)
+    }).then(() => {
+        expect(state.current).toEqual('waitingBets')
+        expect(state.round.bets).toEqual([null,1,0])
+        return state.bet(0, 0)
+    }).then(() => {
+        expect(state.current).toEqual('setStarted')
+        expect(state.round.bets).toEqual([0,1,0])
+        expect(state.round.set.index).toEqual(0)
+        return state.allowPlay()
+    }).then(() => {
+        expect(state.current).toEqual('waitingPlays')
+        expect(state.first).toEqual(2)
+        return state.play(2, 30)
     })
 })
 

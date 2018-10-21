@@ -8,6 +8,14 @@ test('With all flags, first flag should win', () => {
     })
 })
 
+test('Test', () => {
+    const score = trickScore(1,[32,5])
+    expect(score).toEqual({
+        winner: 1,
+        bonus: 0
+    })
+})
+
 // test('With 5 flags and 1 color card, color card should win', () => {
 //     const score = trickScore(0,[65, 64, 63, 40, 62, 61])
 //     expect(score).toEqual({

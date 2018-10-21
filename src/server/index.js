@@ -148,13 +148,15 @@ io.on('connection', (socket) => {
                     io.emit('action', {type: 'CARD_PLAYED', payload: state.round.set.plays})
                     if (state.is('waitingPlays')) {
                         state.token = Uuid.v4()
-                        const nextPlayer = state.players[state.first]
+                        const playedCards = state.round.set.plays.filter((p)=>p!==null)
+                        console.log(state.first, playedCards, (state.first+playedCards.length)%state.players.length)
+                        const nextPlayer = state.players[(state.first+playedCards.length)%state.players.length]
                         nextPlayer.emit('action', { type:'PLAY', payload: state.token })
                         state.players.filter((p)=>p.id!==nextPlayer.id).forEach((p)=>{
                             p.emit('action', {type: 'WAIT_PLAY'})
                         })
                     } else if (state.is('setEnded')) {
-                        console.log("SET_ENDED", state.round.set.index)
+                        console.log("SET_ENDED", state.round.set.index, state.first)
                         return state.nextSet().then(() => {
                             if (state.is('roundEnded')) {
                                 console.log("ROUND_ENDED", state.round.index)
@@ -166,7 +168,7 @@ io.on('connection', (socket) => {
 
                             io.emit('action', {type: 'SET_ENDED', payload: state.round.set.index})
                             state.token = Uuid.v4()
-                            const firstPlayer = state.players[(state.first+1)%state.players.length]
+                            const firstPlayer = state.players[state.first]
                             console.log("TRICK WINNER", firstPlayer.id, firstPlayer.request.user.displayName)
                             firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
                             state.players.filter((p)=>p.id!==firstPlayer.id).forEach((p)=>{

@@ -23,22 +23,22 @@ export const trickScore = (startIdx, cardsPlayed) => {
 
     if (sk !== undefined && m === undefined) {
         return {
-            winner: cards.indexOf(sk),
-            bonus: cards.filter((c)=> {return c > 0 && c < 7 || c === 66}).length * 30
+            winner: cardsPlayed.indexOf(sk),
+            bonus: cardsPlayed.filter((c)=> {return c > 0 && c < 7 || c === 66}).length * 30
         }
     } else if (sk !== undefined && m !== undefined) {
         return {
-            winner: cards.indexOf(m),
+            winner: cardsPlayed.indexOf(m),
             bonus: 50
         } 
     } else if (p !== undefined) {
         return {
-            winner: cards.indexOf(p),
+            winner: cardsPlayed.indexOf(p),
             bonus: 0
         }
     } else if (m !== undefined) {
         return {
-            winner: cards.indexOf(m),
+            winner: cardsPlayed.indexOf(m),
             bonus: 0
         }
     }
@@ -46,7 +46,7 @@ export const trickScore = (startIdx, cardsPlayed) => {
     const blacks = cards.filter((c) => {return c > 8 && c < 22})
     if (blacks.length) {
         return {
-            winner: cards.indexOf(Math.min(...blacks)),
+            winner: cardsPlayed.indexOf(Math.min(...blacks)),
             bonus: 0
         }
     }
@@ -62,7 +62,7 @@ export const trickScore = (startIdx, cardsPlayed) => {
 
     const color = Math.min(...cards.filter((c) => {return cardMap[c].color === cardMap[first_color].color}))
     return {
-        winner: cards.indexOf(color),
+        winner: cardsPlayed.indexOf(color),
         bonus: 0
     }
 }
