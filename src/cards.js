@@ -338,7 +338,7 @@ const assets = [
     {
         "name": "Back",
         "color": "",
-        "assets": ["/assets/sk/place.png"]
+        "assets": ["/assets/sk/back.png"]
     }
 ]
 
