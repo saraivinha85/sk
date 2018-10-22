@@ -2,7 +2,7 @@ import FSM from 'fsm-as-promised'
 
 import {trickScore, roundScore} from './score'
 
-const state = {
+const s = {
     players: [],
     first: null,
     round: {
@@ -18,7 +18,7 @@ const state = {
     score: []
 }
 
-FSM({
+const fsm = {
     initial: 'lobby',
     final: 'lobby',
     events: [
@@ -51,21 +51,19 @@ FSM({
             const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
             this.score = this.score.map((s, idx) => {return s + score[idx]})
         },
-        ondeal: function (options) {
-            console.log('Dealing', this.round.index + 1, 'cards')
-        },
         onbet: function (options) {
             this.round.bets[options.args[0]] = options.args[1]
         },
-        onenterwaitingBets: function (options) {
+        onenterwaitingPlays: function (options) {
         },
         onentersetStarted: function (options) {
             this.round.set.index += 1
             this.round.set.plays = new Array(this.players.length).fill(null)
         },
         onentersetEnded: function (options) {
-            console.log('Set', state.round.set.index, 'ended')
-            const trick = trickScore(this.round.set.plays)
+            console.log("score", this.first, this.round.set.plays)
+            const trick = trickScore(this.first, this.round.set.plays)
+            console.log("score", this.first, this.round.set.plays, trick)
             this.round.tricks[trick.winner] += 1
             this.round.bonus[trick.winner] += trick.bonus
             this.first = trick.winner
@@ -76,7 +74,17 @@ FSM({
         onnextSet: function (option) {
         }
     }
-}, state)
+}
+
+const clone = (obj) => {
+    return JSON.parse(JSON.stringify(obj))
+}
+
+export const state = () => {
+    let st = clone(s)
+    console.log('New state', st)
+    return FSM(fsm, st)
+}
 
 export default state 
 

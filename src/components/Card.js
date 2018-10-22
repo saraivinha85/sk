@@ -26,7 +26,21 @@ class Card extends React.Component {
 
     handleCardSelection = () => {
         const { playCard, id, disabled, canPlayCard, token } = this.props
-        if (!disabled && canPlayCard) {
+        if (!disabled && canPlayCard && id !== 6) {
+            playCard(id, token)
+        }
+    }
+
+    handleFlagSelection = () => {
+        const { playCard, id, disabled, canPlayCard, token } = this.props
+        if (!disabled && canPlayCard && id === 6) {
+            playCard(66, token)
+        }
+    }
+
+    handlePirateSelection = () => {
+        const { playCard, id, disabled, canPlayCard, token } = this.props
+        if (!disabled && canPlayCard && id === 6) {
             playCard(id, token)
         }
     }
@@ -53,8 +67,8 @@ class Card extends React.Component {
                     }
                     {cards[id].assets.length === 3 &&
                         <div>
-                            <img className={classes.badges} src={cards[id].assets[1]} />
-                            <img className={classes.badges} src={cards[id].assets[2]} />
+                            <img onClick={this.handlePirateSelection} className={classes.badgeLeft} src={cards[id].assets[1]} />
+                            <img onClick={this.handleFlagSelection} className={classes.badgeRight} src={cards[id].assets[2]} />
                         </div>
                     }
                 </div>
@@ -109,6 +123,18 @@ const styles = theme => ({
         width: '36%',
         maxWidth: '40%'
     },
+    badgeLeft: {
+        position: 'absolute',
+        width: '40px',
+        top: '-50px',
+        left: '0px'
+    },
+    badgeRight: {
+        position: 'absolute',
+        width: '40px',
+        top: '-50px',
+        right: '0px'
+    }
 })
 
 const mapStateToProps = (state) => {

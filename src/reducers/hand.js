@@ -9,7 +9,8 @@ const hand = (state=INITIAL_STATE, action) => {
         case "DEAL_CARDS":
             return {...state, cards: action.payload}
         case PLAY_CARD:
-            return {...state, cards: state.cards.filter( c => c !== action.payload.id )}
+            const card = action.payload.id === 66? 6 : action.payload.id
+            return {...state, cards: state.cards.filter( c => c !== card )}
         default:
             return state
     }

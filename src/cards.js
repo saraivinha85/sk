@@ -32,7 +32,7 @@ const assets = [
     {
         "name": "Scary Mary Pirate",
         "color": "",
-        "assets": ["/assets/sk/sm.jpg", "/assets/sk/smf.png", "/assets/sk/smp.png"]
+        "assets": ["/assets/sk/sm.jpg", "/assets/sk/sm1.png", "/assets/sk/sm2.png"]
     },
     {
         "name": "Mermaid",
@@ -333,12 +333,12 @@ const assets = [
     {
         "name": "Scary Mary Flag",
         "color": "",
-        "assets": ["/assets/sk/place.png"]
+        "assets": []
     },
     {
         "name": "Back",
         "color": "",
-        "assets": ["/assets/sk/place.png"]
+        "assets": ["/assets/sk/back.png"]
     }
 ]
 
