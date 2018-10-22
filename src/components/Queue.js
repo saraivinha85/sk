@@ -68,7 +68,7 @@ const StyledChip = withStyles({
         marginTop: 0,
         marginBottom: 0,
         backgroundColor: '#00000042',
-        color: 'unset'
+        color: 'unset',
     },
     deleteIcon: {
         margin: '0px',

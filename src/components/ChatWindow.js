@@ -1,52 +1,64 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Drawer from '@material-ui/core/Drawer'
-import Button from '@material-ui/core/Button'
-import PersonAdd from '@material-ui/icons/PersonAdd'
+import Grid from '@material-ui/core/Grid'
 
-import {openChat} from '../actions/game'
+import Chat from './Chat'
+import Players from './Players'
+import { toggleChatWindow } from '../actions/game'
 
 class ChatWindow extends React.Component {
-    handleToggleChat = () => {
-        const {toggle} = this.props
-        toggle()
+    handleClose = () => {
+        const { toggleChatWindow } = this.props
+        toggleChatWindow()
     }
 
     render() {
-        const {classes, isOpen, children} = this.props
+        const { classes, isOpen, children } = this.props
         return (
-            <div>
+            <StyledPaper>
                 <Drawer
                     anchor={'bottom'}
                     variant={'temporary'}
                     open={isOpen}
-                    PaperProps={ {component: StyledPaper} }
+                    onClose={this.handleClose}
+                    PaperProps={{ component: StyledPaper }}
                 >
-                    {children} 
+                    <Grid container spacing={8}>
+                        <Grid item xs={3}>
+                            <StyledPaper className={classes.paper}>
+                                <Players />
+                            </StyledPaper>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <StyledPaper className={classes.paper}>
+                                <Chat />
+                            </StyledPaper>
+                        </Grid>
+                    </Grid>
                 </Drawer>
-                <Button className={classes.button} color="primary" variant='contained' onClick={this.handleToggleChat}>
-                    Open chat
-                </Button>
-            </div>
+            </StyledPaper>
         )
     }
 }
 
 const StyledPaper = withStyles({
     root: {
-        backgroundColor: '#fafafa14',
+        backgroundColor: '#2f2f2fbd',
+        overflow: 'hidden'
     }
 })(Paper)
 
 const styles = {
     root: {
-        backgroundColor: '#ffffff00'
+        backgroundColor: '#ffffff00',
     },
-    button: {
-        zIndex: 5000
+    paper: {
+        height: '100%',
+        textAlign: 'center'
     }
 }
 
@@ -58,7 +70,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        toggle: () => {dispatch(openChat())},
+        toggleChatWindow: () => { dispatch(toggleChatWindow()) },
         dispatch
     }
 }

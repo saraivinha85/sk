@@ -21,11 +21,10 @@ export const submitComment = (comment) => {
     }
 }
 
-export const OPEN_CHAT = "OPEN_CHAT"
-export const openChat = (isOpen) => {
+export const TOGGLE_CHAT_WINDOW = "TOGGLE_CHAT_WINDOW"
+export const toggleChatWindow = () => {
     return {
-        type: OPEN_CHAT,
-        payload: isOpen 
+        type: TOGGLE_CHAT_WINDOW
     }
 }
 

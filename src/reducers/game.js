@@ -20,8 +20,8 @@ const game = (state=INITIAL_STATE, action) => {
         case 'GAME_ENDED':
             return {...state, started: false}
         case 'NEW_COMMENT':
-            return {...state, comments: [action.payload, ...state.comments]}
-        case 'OPEN_CHAT':
+            return {...state, comments: [...state.comments, action.payload]}
+        case 'TOGGLE_CHAT_WINDOW':
             return {...state, isChatOpen: !state.isChatOpen}
         default:
             return state
