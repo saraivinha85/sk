@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
-    "@material-ui/icons": "^3.0.1",
+    "@material-ui/icons": "latest",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-es2015-template-literals": "^6.22.0",
     "babel-preset-env": "^1.7.0",

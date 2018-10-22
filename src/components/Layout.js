@@ -6,9 +6,10 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 
 import Toolbar from './Toolbar' 
+import ChatWindow from './ChatWindow'
+import Chat from './Chat'
 import Queue from './Queue'
 import Players from './Players'
-import Chat from './Chat'
 import Table from './Table'
 
 class Layout extends Component {
@@ -34,11 +35,14 @@ class Layout extends Component {
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={9}>
-                        <StyledPaper className={classes.paper}>
-                            <Chat />
-                        </StyledPaper>
-                    </Grid>                    
+                                            </Grid>                    
                 </Grid>
+                <ChatWindow>
+                    <StyledPaper className={classes.paper}>
+                        <Chat />
+                    </StyledPaper>
+                </ChatWindow>
+                
             </div>
         )
     }

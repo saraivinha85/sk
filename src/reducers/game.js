@@ -2,7 +2,8 @@ const INITIAL_STATE = {
     players: [],
     queue: [],
     comments: [],
-    started: false
+    started: false,
+    isChatOpen: false
 }
 
 const game = (state=INITIAL_STATE, action) => {
@@ -20,6 +21,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, started: false}
         case 'NEW_COMMENT':
             return {...state, comments: [action.payload, ...state.comments]}
+        case 'OPEN_CHAT':
+            return {...state, isChatOpen: !state.isChatOpen}
         default:
             return state
     }

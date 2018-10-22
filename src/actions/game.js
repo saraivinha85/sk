@@ -21,3 +21,11 @@ export const submitComment = (comment) => {
     }
 }
 
+export const OPEN_CHAT = "OPEN_CHAT"
+export const openChat = (isOpen) => {
+    return {
+        type: OPEN_CHAT,
+        payload: isOpen 
+    }
+}
+
