@@ -22,6 +22,7 @@ class Hand extends React.Component {
     }
 
     render() {
+        const { classes, canPlay } = this.props
         const { spacing } = this.state;
 
         const hand = this.buildHand()
@@ -34,7 +35,9 @@ class Hand extends React.Component {
                         justify="center"
                         spacing={Number(spacing)}
                     >
-                        {hand}
+                        <div className={canPlay? classes.turnIndicatorOn : classes.turnIndicatorOff}>
+                            {hand}
+                        </div>
                     </Grid>
                 </Grid>
             </div>
@@ -49,11 +52,23 @@ const styles = theme => ({
     control: {
         padding: theme.spacing.unit * 2,
     },
+    turnIndicatorOn: {
+        border: '1px solid',
+        padding: '5px',
+        display: 'flex'
+    },
+    turnIndicatorOff: {
+        border: '1px solid transparent',
+        padding: '5px',
+        display: 'flex'
+    }
+
 })
 
 const mapStateToProps = (state) => {
     return {
         cards: state.hand.cards,
+        canPlay: state.round.canPlay
     }
 }
 

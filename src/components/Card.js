@@ -49,7 +49,7 @@ class Card extends React.Component {
         const { classes, id } = this.props
         return (
             <Paper
-                className={classes.paper}
+                className={this.props.xs? classes.paperSmall : classes.paper}
                 onMouseEnter={this.handleOnHover}
                 onMouseLeave={this.handleOnLeave}
                 onMouseUp={this.handleCardSelection}
@@ -79,16 +79,23 @@ class Card extends React.Component {
 
 const styles = theme => ({
     paper: {
-        height: 140,
-        width: 90,
+        height: '120px',
+        width: '80px',
+        color: 'black',
+        backgroundColor: 'transparent',
+        borderRadius: '15px',
+    },
+    paperSmall: {
+        height: '75px',
+        width: '50px',
         color: 'black',
         backgroundColor: 'transparent',
         borderRadius: '15px',
     },
     cardContainer: {
         position: 'relative',
-        height: '140px',
-        width: '90px'
+        height: '100%',
+        width: '100%'
     },
     background: {
         borderRadius: '15px',

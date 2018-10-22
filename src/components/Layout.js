@@ -5,11 +5,11 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 
-import GameOptions from './GameOptions'
-import GameQueue from './Queue'
+import Toolbar from './Toolbar' 
+import Queue from './Queue'
 import Players from './Players'
 import Chat from './Chat'
-import GameTable from './Table'
+import Table from './Table'
 
 class Layout extends Component {
     render() {
@@ -19,11 +19,13 @@ class Layout extends Component {
             <div className={classes.root}>
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
-                        <StyledPaper className={classes.paper}>Skull King</StyledPaper>
+                        <StyledPaper className={classes.paper}>
+                            <Toolbar />
+                        </StyledPaper>
                     </Grid>
                     <Grid item xs={12}>
                         <StyledPaper className={classes.paper}>
-                            {isGameStarted? <GameTable />: <GameQueue />}
+                            {isGameStarted? <Table />: <Queue />}
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={3}>

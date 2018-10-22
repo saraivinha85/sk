@@ -54,13 +54,13 @@ class PlayersHand extends React.Component {
                 }
 
                 return <div style={{ zIndex: idx<length? idx : count - idx%length - 1, position: 'absolute', transform: `rotate(${angle}deg)`, transformOrigin: '50% 0%'}}>
-                    <Card disabled id={67}/>
+                    <Card xs disabled id={67}/>
                 </div>
             })
 
             if (!isEven) {
-                cardElements.push(<div style={{ zIndex: length-1, position: 'absolute'}}>
-                    <Card disabled id={67}/>
+                cardElements.push(<div style={{ zIndex: length < 0? 0: length-1, position: 'absolute'}}>
+                    <Card xs disabled id={67}/>
                 </div>)
             } 
 
@@ -109,8 +109,8 @@ const styles = {
     },
     'hiddenHandTop': {
         position: 'relative',
-        left: '-25px',
-        top: '35px'
+        left: '-3px',
+        top: '20px'
         //display: 'inline-flex'
     },
     'hiddenHandRight': {

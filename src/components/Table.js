@@ -98,6 +98,7 @@ const styles = {
         backgroundColor: '#0000002b',
         width: '80px',
         height: '80px',
+        margin: '2px'
     }
 }
 
