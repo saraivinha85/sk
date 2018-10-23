@@ -28,11 +28,11 @@ socketioAuth(io)
 const isAuthenticated = (req, res, next) => { return req.isAuthenticated()? next() : res.redirect('/auth/google') }
 
 app.get('/', isAuthenticated, (req, res) => {
-    res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
-    //res.writeHead(302, {
-        //Location: 'http://localhost:3000/'
-    //})
-    //res.end()
+    //res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
+    res.writeHead(302, {
+        Location: 'http://localhost:3000/'
+    })
+    res.end()
 })
 
 app.get('/error', (req, res) => {

@@ -16,7 +16,7 @@ export const expressAuth = (passport) => {
     })
 
     const strategy = googleStrategy() 
-    //setProxy(strategy)
+    setProxy(strategy)
     passport.use(strategy)
 }
 
@@ -69,7 +69,9 @@ const passportAuthorizeConfig = {
 }
 
 const setProxy = (strategy) => {
-    const proxy = new HttpsProxyAgent('http://localhost:3128')
-    strategy._oauth2.setAgent(proxy)
+    if (process.env.PROXY) {
+        const proxy = new HttpsProxyAgent(process.env.PROXY)
+        strategy._oauth2.setAgent(proxy)
+    }
 }
 
