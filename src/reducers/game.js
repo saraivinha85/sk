@@ -4,7 +4,8 @@ const INITIAL_STATE = {
     comments: [],
     started: false,
     isChatOpen: false,
-    isScoreOpen: false
+    isScoreOpen: false,
+    chatBadge: 0
 }
 
 const game = (state=INITIAL_STATE, action) => {
@@ -21,9 +22,9 @@ const game = (state=INITIAL_STATE, action) => {
         case 'GAME_ENDED':
             return {...state, started: false}
         case 'NEW_COMMENT':
-            return {...state, comments: [...state.comments, action.payload]}
+            return {...state, comments: [...state.comments, action.payload ], chatBadge: state.isChatOpen? 0 : state.chatBadge + 1 }
         case 'TOGGLE_CHAT_WINDOW':
-            return {...state, isChatOpen: !state.isChatOpen}
+            return {...state, isChatOpen: !state.isChatOpen, chatBadge: 0 }
         case 'TOGGLE_SCORE_WINDOW':
             return {...state, isScoreOpen: !state.isScoreOpen}
         default:

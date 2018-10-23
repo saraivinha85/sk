@@ -97,6 +97,9 @@ const styles = theme => ({
     row: {
         alignText: 'center',
         '&:nth-of-type(odd)': {
+            backgroundColor: '#f3f3f3'
+        },
+        '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.background.default,
         }
     },

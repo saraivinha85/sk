@@ -62,11 +62,12 @@ class Chat extends Component {
                     id="standard-full-width"
                     fullWidth
                     variant='filled'
+                    inputRef={(r)=>{this.input = r}}
                     InputProps={{
-                        className: classes.input
+                        inputProps: {className: classes.input},
+                        autoFocus: true,
                     }}
                     InputLabelProps={{
-                        ref: (r) => {this.input = r},
                         shrink: true,
                     }}
                     onKeyPress={this.submitComment}
@@ -100,7 +101,7 @@ const styles = {
         width: '1%'
     },
     input: {
-        color: 'unset'
+        padding: '10px'
     }
 }
 

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
+import Badge from '@material-ui/core/Badge'
 
 import { toggleChatWindow, toggleScoreWindow  } from '../actions/game'
 
@@ -21,14 +22,16 @@ class Toolbar extends Component {
     }
 
     render() {
-        const { classes, player } = this.props
+        const { classes, player, chatBadge } = this.props
         const { name, photo } = player || {}
 
         return (
             <div className={classes.root}>
-                <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
-                    Chat
-                </Button>
+                <Badge color="primary" badgeContent={chatBadge} className={classes.chatBadge}>
+                    <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
+                        Chat
+                    </Button>
+                </Badge>
                 <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleScoreWindow}>
                     Score 
                 </Button>
@@ -46,7 +49,7 @@ class Toolbar extends Component {
     }
 }
 
-const styles = {
+const styles = theme => ({
     root: {
         display: 'flex',
         justifyContent: 'space-between'
@@ -69,12 +72,31 @@ const styles = {
     },
     button: {
         zIndex: 5000
+    },
+    chatBadge: {
+        margin: {
+            margin: theme.spacing.unit * 2,
+        },
+    },
+    badgeVisible: {
+        badge: {
+            visibility: 'visible'
+        }
+    },
+    badgeHidden: {
+        badge: {
+            visibility: 'hidden',
+            display: 'none'
+        }
     }
-}
+
+
+})
 
 const mapStateToProps = (state) => {
     return {
         player: state.game.players.find((p) => p.id === state.game.id),
+        chatBadge: state.game.chatBadge
     }
 }
 
