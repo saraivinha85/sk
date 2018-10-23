@@ -86,8 +86,8 @@ const styles = theme => ({
         borderRadius: '15px',
     },
     paperSmall: {
-        height: '75px',
-        width: '50px',
+        height: '90px',
+        width: '60px',
         color: 'black',
         backgroundColor: 'transparent',
         borderRadius: '15px',

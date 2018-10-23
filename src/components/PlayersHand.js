@@ -109,7 +109,7 @@ const styles = {
     },
     'hiddenHandTop': {
         position: 'relative',
-        left: '-3px',
+        left: '-9px',
         top: '20px'
         //display: 'inline-flex'
     },

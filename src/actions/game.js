@@ -28,3 +28,10 @@ export const toggleChatWindow = () => {
     }
 }
 
+export const TOGGLE_SCORE_WINDOW = "TOGGLE_SCORE_WINDOW"
+export const toggleScoreWindow = () => {
+    return {
+        type: TOGGLE_SCORE_WINDOW
+    }
+}
+

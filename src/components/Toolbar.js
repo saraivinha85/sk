@@ -6,13 +6,18 @@ import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 
-import { toggleChatWindow } from '../actions/game'
+import { toggleChatWindow, toggleScoreWindow  } from '../actions/game'
 
 class Toolbar extends Component {
 
     handleToggleChatWindow = () => {
         const { toggleChatWindow } = this.props
         toggleChatWindow()
+    }
+
+    handleToggleScoreWindow = () => {
+        const { toggleScoreWindow } = this.props
+        toggleScoreWindow()
     }
 
     render() {
@@ -23,6 +28,9 @@ class Toolbar extends Component {
             <div className={classes.root}>
                 <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
                     Chat
+                </Button>
+                <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleScoreWindow}>
+                    Score 
                 </Button>
                 <div className={classes.user}>
                     <Avatar
@@ -73,6 +81,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleChatWindow: () => { dispatch(toggleChatWindow()) },
+        toggleScoreWindow: () => { dispatch(toggleScoreWindow()) },
         dispatch
     }
 }

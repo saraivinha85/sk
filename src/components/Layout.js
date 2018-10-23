@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 
 import Toolbar from './Toolbar'
 import ChatWindow from './ChatWindow'
+import ScoreWindow from './ScoreWindow'
 import Queue from './Queue'
 import Table from './Table'
 
@@ -29,6 +30,7 @@ class Layout extends Component {
                     </Grid>
                 </Grid>
                 <ChatWindow />
+                <ScoreWindow />
             </div>
         )
     }

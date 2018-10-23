@@ -3,7 +3,8 @@ const INITIAL_STATE = {
     queue: [],
     comments: [],
     started: false,
-    isChatOpen: false
+    isChatOpen: false,
+    isScoreOpen: false
 }
 
 const game = (state=INITIAL_STATE, action) => {
@@ -23,6 +24,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, comments: [...state.comments, action.payload]}
         case 'TOGGLE_CHAT_WINDOW':
             return {...state, isChatOpen: !state.isChatOpen}
+        case 'TOGGLE_SCORE_WINDOW':
+            return {...state, isScoreOpen: !state.isScoreOpen}
         default:
             return state
     }
