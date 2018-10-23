@@ -28,11 +28,14 @@ socketioAuth(io)
 const isAuthenticated = (req, res, next) => { return req.isAuthenticated()? next() : res.redirect('/auth/google') }
 
 app.get('/', isAuthenticated, (req, res) => {
-    //res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
-    res.writeHead(302, {
-        Location: 'http://localhost:3000/'
-    })
-    res.end()
+    if (process.env.NODE_ENV==='production') {
+        res.sendFile(Path.resolve(__dirname, '..', '..', 'build', 'index-client.html'))
+    } else {
+        res.writeHead(302, {
+            Location: 'http://localhost:3000/'
+        })
+        res.end()
+    }
 })
 
 app.get('/error', (req, res) => {
@@ -116,10 +119,10 @@ io.on('connection', (socket) => {
                 }).then(() => {
                     return dealCardsForRound(state.players, state.round.index + 1)
                 })
-                .catch((error) => {
-                    console.log(error)
-                    return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
-                })
+                    .catch((error) => {
+                        console.log(error)
+                        return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
+                    })
             case 'server/PLACE_BET':
                 return state.bet(getPlayerIndex(socket, state.players), action.payload).then(() => {
                     if (state.is('setStarted')) {
@@ -174,7 +177,7 @@ io.on('connection', (socket) => {
 
                             Sleep.sleep(2)
                             io.emit('action', {type: 'SET_ENDED', payload: state.round.set.index})
-                            
+
                             state.token = Uuid.v4()
                             const firstPlayer = state.players[state.first]
                             console.log("TRICK WINNER", firstPlayer.id, firstPlayer.request.user.displayName)
@@ -193,8 +196,8 @@ io.on('connection', (socket) => {
                                 return dealCardsForRound(state.players, state.round.index + 1)
                             }
                         }).catch((error) => {
-                                    console.log(error)
-                                    return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
+                            console.log(error)
+                            return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
 
                         })
                     } 
@@ -211,8 +214,8 @@ io.on('connection', (socket) => {
         const idx = IO_CLIENTS.indexOf(socket)
         IO_CLIENTS.splice(idx, 1)
         const players = getCurrentPlayers()
-        
-        
+
+
 
         if (players.length>0) {
             io.emit('action', {type: 'USER_LEFT', payload: {players: players, leader: LEADER}})
