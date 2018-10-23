@@ -15,7 +15,7 @@ import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker'
 
 
-const socket = io("http://localhost:3001") 
+const socket = io("/") 
 
 socket.on('error', (reason) => {
 	//if (reason === '404') {
