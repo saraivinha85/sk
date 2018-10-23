@@ -1,4 +1,3 @@
-import { PLAY_CARD } from '../actions/card'
 import { PLACE_BET } from '../actions/round'
 
 const INITIAL_STATE = {
@@ -6,7 +5,8 @@ const INITIAL_STATE = {
     bets: [],
     index: null,
     set: null,
-    token: null
+    token: null,
+    score: []
 }
 
 const round = (state = INITIAL_STATE, action) => {
@@ -27,6 +27,8 @@ const round = (state = INITIAL_STATE, action) => {
             return { ...state, canPlay: false, token: null }
         case 'CARD_PLAYED':
             return { ...state, cards: action.payload }
+        case 'SCORE':
+            return { ...state, score: [...state.score, action.payload] }
         default:
             return state
     }

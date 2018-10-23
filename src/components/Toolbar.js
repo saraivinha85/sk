@@ -28,13 +28,13 @@ class Toolbar extends Component {
         return (
             <div className={classes.root}>
                 <Badge color="primary" badgeContent={chatBadge} className={classes.chatBadge}>
-                    <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
+                    <StyledButton variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
                         Chat
-                    </Button>
+                    </StyledButton>
                 </Badge>
-                <Button variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleScoreWindow}>
+                <StyledButton variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleScoreWindow}>
                     Score 
-                </Button>
+                </StyledButton>
                 <div className={classes.user}>
                     <Avatar
                         className={classes.avatar}
@@ -92,6 +92,15 @@ const styles = theme => ({
 
 
 })
+
+const StyledButton = withStyles(theme => ({
+    outlinedPrimary: {
+        border: '1px solid #2ecc4078',
+    },
+    label: {
+        color: '#2ECC40'
+    }
+}))(Button)
 
 const mapStateToProps = (state) => {
     return {

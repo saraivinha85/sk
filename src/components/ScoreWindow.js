@@ -11,7 +11,6 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Avatar from '@material-ui/core/Avatar'
 
-import Players from './Players'
 import { toggleScoreWindow } from '../actions/game'
 
 class ScoreWindow extends React.Component {
@@ -22,7 +21,7 @@ class ScoreWindow extends React.Component {
 
     renderPlayersName = () => {
         const { classes, players } = this.props
-        return players.map((p)=>{
+        return players.map((p) => {
             return <TableCell key={`name_${p.id}`}>
                 <div className={classes.player}>
                     <Avatar className={classes.avatar} src={p.photo} />
@@ -33,9 +32,9 @@ class ScoreWindow extends React.Component {
     }
 
     renderRows = () => {
-        const {classes} = this.props
+        const { classes, score } = this.props
 
-        return Array.from(Array(10).keys()).map((r, idx) => {
+        return score.map((s, idx) => {
             return <TableRow className={classes.row} key={idx}>
                 <StyledTableCell numeric component="th" scope="row">
                     {idx + 1}
@@ -45,20 +44,32 @@ class ScoreWindow extends React.Component {
         })
     }
 
+    renderTotalScore = () => {
+        const { classes, score } = this.props
+        const totals = score.reduce((r, a) => a.map((b, i) => (r[i] || 0) + b), [])
+        return totals.map((s, i) => {
+            return <StyledTableCell key={`totalscore_${i}`} numeric>
+                {s}
+            </StyledTableCell>
+        })
+    }
+
     renderScoreForRound = (idx) => {
-        const {players} = this.props
-        return players.map((p) => {
-            return <StyledTableCell key={`score_${p.id}`} numeric>
-                {0}
+        const { score } = this.props
+        const roundScore = score[idx]
+
+        return roundScore.map((s, i) => {
+            return <StyledTableCell key={`score_${idx}_${i}`} numeric>
+                {s}
             </StyledTableCell>
         })
     }
 
     render() {
-        const { classes, isOpen, children, ...other } = this.props	
+        const { classes, isOpen, children, ...other } = this.props
 
         return (
-            <Dialog open={isOpen} onClose={this.handleClose} aria-labelledby="score-dialog">
+            <Dialog PaperProps={{ className: classes.paper }} open={isOpen} onClose={this.handleClose} aria-labelledby="score-dialog">
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
@@ -68,10 +79,15 @@ class ScoreWindow extends React.Component {
                     </TableHead>
                     <TableBody>
                         {this.renderRows()}
+                        <StyledTableCell component="th" scope="row">
+                            Total
+                </StyledTableCell>
+                        {this.renderTotalScore()}
                     </TableBody>
                 </Table>
             </Dialog>
-        )}
+        )
+    }
 }
 
 const StyledTableCell = withStyles(theme => ({
@@ -86,11 +102,10 @@ const StyledTableCell = withStyles(theme => ({
 
 const styles = theme => ({
     root: {
-        backgroundColor: '#ffffff00',
+
     },
     paper: {
-        height: '100%',
-        textAlign: 'center'
+        padding: '20px'
     },
     table: {
     },
@@ -106,10 +121,11 @@ const styles = theme => ({
     avatar: {
         height: '22px',
         width: '22px',
+        marginRight: '10px'
     },
     player: {
         display: 'inline-flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
     }
 })
@@ -117,7 +133,9 @@ const styles = theme => ({
 const mapStateToProps = (state) => {
     return {
         isOpen: state.game.isScoreOpen,
-        players: state.game.players
+        players: state.game.players,
+        round: state.round.index,
+        score: state.round.score,
     }
 }
 

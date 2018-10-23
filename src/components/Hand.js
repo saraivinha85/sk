@@ -1,5 +1,7 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+
+import { Spring } from 'react-spring'
 
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
@@ -13,10 +15,10 @@ class Hand extends React.Component {
     }
 
     buildHand = () => {
-        const {cards} = this.props
-        return cards.map( c =>
+        const { cards } = this.props
+        return cards.map(c =>
             <Grid key={c} item>
-                <Card id={c}/>
+                <Card id={c} />
             </Grid>
         )
     }
@@ -35,7 +37,7 @@ class Hand extends React.Component {
                         justify="center"
                         spacing={Number(spacing)}
                     >
-                        <div className={canPlay? classes.turnIndicatorOn : classes.turnIndicatorOff}>
+                        <div className={canPlay ? classes.turnIndicatorOn : classes.turnIndicatorOff}>
                             {hand}
                         </div>
                     </Grid>
@@ -61,6 +63,15 @@ const styles = theme => ({
         border: '1px solid transparent',
         padding: '5px',
         display: 'flex'
+    },
+    snake: {
+        width: '10px',
+        height: '10px',
+        borderRadius: '20px',
+        backgroundColor: 'red',
+        position: 'absolute',
+        bottom: '0px',
+        left: '0px'
     }
 
 })

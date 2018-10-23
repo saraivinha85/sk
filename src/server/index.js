@@ -169,7 +169,7 @@ io.on('connection', (socket) => {
                             if (state.is('roundEnded')) {
                                 Sleep.sleep(2)
                                 console.log("ROUND_ENDED", state.round.index)
-                                io.emit('action', {type: 'SCORE', payload: state.score})
+                                io.emit('action', {type: 'SCORE', payload: state.round.score})
                                 console.log("SCORE", state.score)
                                 console.log("LAST TRICK WINNER", state.players[state.first].id, state.players[state.first].request.user.displayName)
                                 return state.nextRound()

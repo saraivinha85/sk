@@ -24,6 +24,7 @@
     "react-redux": "latest",
     "react-router-dom": "^4.3.1",
     "react-scripts": "latest",
+    "react-spring": "^5.9.2",
     "redux": "latest",
     "redux-logger": "^3.0.6",
     "redux-socket.io": "^1.4.0",

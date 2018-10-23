@@ -12,6 +12,7 @@ const s = {
             index: -1,
             plays: [],
         },
+        score: [],
         tricks: [],
         bonus: []
     },
@@ -49,6 +50,7 @@ const fsm = {
         },
         onenterroundEnded: function (options) {
             const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
+            this.round.score = score
             this.score = this.score.map((s, idx) => {return s + score[idx]})
         },
         onbet: function (options) {
