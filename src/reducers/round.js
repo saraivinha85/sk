@@ -22,9 +22,9 @@ const round = (state = INITIAL_STATE, action) => {
         case 'SET_ENDED':
             return { ...state, cards: [] }
         case 'PLAY':
-            return { ...state, canPlay: true, token: action.payload }
+            return { ...state, canPlay: true, token: action.payload, currentPlayer: null }
         case 'WAIT_PLAY':
-            return { ...state, canPlay: false, token: null }
+            return { ...state, canPlay: false, token: null, currentPlayer: action.payload }
         case 'CARD_PLAYED':
             return { ...state, cards: action.payload }
         case 'SCORE':

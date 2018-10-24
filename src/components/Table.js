@@ -5,16 +5,16 @@ import ContainerDimensions from 'react-container-dimensions'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
-import Fade from '@material-ui/core/Fade'
 
 import Hand from './Hand'
 import Card from './Card'
 import { placeBet } from '../actions/round'
 import PlayersHand from './PlayersHand'
+import ThrowEffect from './ThrowEffect'
 
 class Table extends React.Component {
     renderCenterCards = () => {
-        return this.props.table.filter((c) =>c!==null).map(c =>
+        return this.props.table.filter((c) => c !== null).map(c =>
             <Grid key={c} item>
                 <Card id={c} disabled />
             </Grid>
@@ -22,9 +22,9 @@ class Table extends React.Component {
     }
 
     renderBets = () => {
-        const {hand, classes} = this.props
+        const { hand, classes } = this.props
         return [...Array(hand.length + 1).keys()].map((t) => {
-                return <Avatar className={classes.bet} onClick={() => { this.handleBet(t) }}>{`${t}`}</Avatar>
+            return <Avatar className={classes.bet} onClick={() => { this.handleBet(t) }}>{`${t}`}</Avatar>
         })
     }
 
@@ -42,20 +42,18 @@ class Table extends React.Component {
                 <ContainerDimensions>
                     <PlayersHand />
                 </ContainerDimensions>
-                <Fade in={table.length!==0} timeout={1000}>
-                    <div className={classes.centerCards}>
-                        {playedCards}
-                    </div>
-                </Fade>
+                <div className={classes.centerCards}>
+                    {playedCards}
+                </div>
                 {!hasBet &&
-                <div className={classes.betsContainer}>
-                    <h1>Place your bet</h1>
-                    <div className={classes.bets}>
-                        {bets}
-                    </div>
-                </div>}
+                    <div className={classes.betsContainer}>
+                        <h1>Place your bet</h1>
+                        <div className={classes.bets}>
+                            {bets}
+                        </div>
+                    </div>}
                 <div className={classes.hand}>
-                    <Hand/>
+                    <Hand />
                 </div>
             </div>
         )
@@ -64,7 +62,7 @@ class Table extends React.Component {
 
 const styles = {
     root: {
-        height: '85vh',
+        height: '87vh',
         position: 'relative',
         display: 'flex',
         justifyContent: 'center',
@@ -98,7 +96,8 @@ const styles = {
         backgroundColor: '#0000002b',
         width: '80px',
         height: '80px',
-        margin: '2px'
+        margin: '2px',
+        border: '1px solid gold'
     }
 }
 

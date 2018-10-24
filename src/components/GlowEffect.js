@@ -15,8 +15,7 @@ const Container = Keyframes.Spring({
 const styles = {
     glow: {
         backgroundColor: 'transparent',
-        borderRadius: '8px',
-        display: 'inline-flex'
+        display: 'inline-flex',
     }
 }
 
@@ -33,12 +32,12 @@ class GlowEffect extends React.Component {
     }
 
     render() {
-        const {classes, children} = this.props
+        const {classes, children, className} = this.props
 
         return (
             <Container reset={this.state.reset} onRest={this.reset} state="glow">
                 { styles => {
-                    return <div className={classes.glow} style={{boxShadow: `0 0 ${styles.boxShadow}px gold`}}>
+                    return <div className={`${className} ${classes.glow}`} style={{boxShadow: `0 0 ${styles.boxShadow}px gold`}}>
                         {children}
                     </div>
                 }}

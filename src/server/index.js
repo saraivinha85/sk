@@ -134,7 +134,7 @@ io.on('connection', (socket) => {
                         const firstPlayer = state.players[state.first]
                         firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
                         state.players.filter((p)=>p.id!==firstPlayer.id).forEach((p)=>{
-                            p.emit('action', {type: 'WAIT_PLAY'})
+                            p.emit('action', {type: 'WAIT_PLAY', payload: firstPlayer.id})
                         })
                         return state.allowPlay() 
                     } else {
@@ -161,7 +161,7 @@ io.on('connection', (socket) => {
                         const nextPlayer = state.players[(state.first+playedCards.length)%state.players.length]
                         nextPlayer.emit('action', { type:'PLAY', payload: state.token })
                         state.players.filter((p)=>p.id!==nextPlayer.id).forEach((p)=>{
-                            p.emit('action', {type: 'WAIT_PLAY'})
+                            p.emit('action', {type: 'WAIT_PLAY', payload: nextPlayer.id})
                         })
                     } else if (state.is('setEnded')) {
                         console.log("SET_ENDED", state.round.set.index, state.first)
@@ -183,7 +183,7 @@ io.on('connection', (socket) => {
                             console.log("TRICK WINNER", firstPlayer.id, firstPlayer.request.user.displayName)
                             firstPlayer.emit('action', {type: 'PLAY', payload: state.token})
                             state.players.filter((p)=>p.id!==firstPlayer.id).forEach((p)=>{
-                                p.emit('action', {type: 'WAIT_PLAY'})
+                                p.emit('action', {type: 'WAIT_PLAY', payload: firstPlayer.id})
                             })
                             return state.allowPlay() 
                         }).then(() => {

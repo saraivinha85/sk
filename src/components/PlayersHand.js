@@ -7,12 +7,14 @@ import Avatar from '@material-ui/core/Avatar'
 import Hand from './Hand'
 
 import Card from './Card'
+import GlowEffect from './GlowEffect'
+
 import { placeBet } from '../actions/round'
 
 class PlayersHand extends React.Component {
 
     renderPlayers = () => {
-        const { width, height, players, playerId, classes, table, hand } = this.props
+        const { width, height, players, playerId, classes, table, hand, currentPlayer } = this.props
 
         const playerIndex = players.findIndex((p) => p.id === playerId)
         const sortedPlayers = players.slice(playerIndex + 1, players.length + 1).concat(players.slice(0, playerIndex))
@@ -59,7 +61,7 @@ class PlayersHand extends React.Component {
             })
 
             if (!isEven) {
-                cardElements.push(<div style={{ zIndex: length < 0? 0: length-1, position: 'absolute'}}>
+                cardElements.push(<div style={{ zIndex: length <= 0? 0: length-1, position: 'absolute'}}>
                     <Card xs disabled id={67}/>
                 </div>)
             } 
@@ -73,10 +75,11 @@ class PlayersHand extends React.Component {
             const cardsLeft = table[pIndex] !== null? 1: 0
             const played = table[playerIndex] !== null? 1: 0
             const count = hand.length - cardsLeft + played
+            const avatar = <Avatar className={classes.avatar} src={p.photo}/>
             return <div key={p.id} style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
-                <Avatar className={classes.avatar} src={p.photo}/>
+                {currentPlayer === p.id? <GlowEffect className={classes.glow}>{avatar}</GlowEffect> : avatar}
                 <div className={handClass} >
-                    {renderCards(count<0? 0: count)}
+                    {renderCards(count<=0? 0: count)}
                 </div>
             </div>
         })
@@ -105,7 +108,10 @@ const styles = {
     },
     avatar: {
         margin: 0,
-        backgroundColor: '#00000069'
+        backgroundColor: 'transparent'
+    },
+    glow: {
+        borderRadius: '50px'
     },
     'hiddenHandTop': {
         position: 'relative',
@@ -135,6 +141,7 @@ const mapStateToProps = (state) => {
         set: state.round.set,
         round: state.round.index,
         players: state.game.players,
+        currentPlayer: state.round.currentPlayer
     }
 }
 

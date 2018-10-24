@@ -10,9 +10,7 @@ import GlowEffect from './GlowEffect'
 class Hand extends React.Component {
 
     state = {
-        spacing: '0',
-        reset: true 
-    }
+        spacing: '0',    }
 
     buildHand = () => {
         const { cards } = this.props
@@ -21,12 +19,6 @@ class Hand extends React.Component {
             <Card id={c} />
         </Grid>
         )
-    }
-
-    reset = (styles) => {
-        if (styles.boxShadow === 0) {
-            this.setState({reset: true})
-        }
     }
 
     render() {
@@ -42,7 +34,7 @@ class Hand extends React.Component {
                         justify="center"
                         spacing={Number(spacing)}
                     >
-                        {canPlay? <GlowEffect>{hand}</GlowEffect> : hand}
+                        {canPlay? <GlowEffect className={classes.glow}>{hand}</GlowEffect> : hand}
                     </Grid>
                 </Grid>
             </div>
@@ -51,6 +43,9 @@ class Hand extends React.Component {
 }
 
 const styles = theme => ({
+    glow: {
+        borderRadius: '10px'
+    },
     root: {
         flexGrow: 1,
     },

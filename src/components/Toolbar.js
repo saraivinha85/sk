@@ -28,11 +28,11 @@ class Toolbar extends Component {
         return (
             <div className={classes.root}>
                 <Badge color="secondary" badgeContent={chatBadge} className={classes.chatBadge}>
-                    <StyledButton variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
+                    <StyledButton variant="outlined" size="small" className={classes.button} onClick={this.handleToggleChatWindow}>
                         Chat
                     </StyledButton>
                 </Badge>
-                <StyledButton variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleScoreWindow}>
+                <StyledButton variant="outlined" size="small" className={classes.button} onClick={this.handleToggleScoreWindow}>
                     Score 
                 </StyledButton>
                 <div className={classes.user}>
@@ -71,7 +71,6 @@ const styles = theme => ({
         color: '#ffffff9c'
     },
     button: {
-        zIndex: 5000
     },
     chatBadge: {
         margin: {
@@ -94,14 +93,14 @@ const styles = theme => ({
 })
 
 const StyledButton = withStyles(theme => ({
-    outlinedPrimary: {
+    outlined: {
         border: '1px solid #ffd7008c',
         '&:hover': {
             border: '1px solid gold'
         }
     },
     label: {
-        color: 'gold'
+        color: '#ffffff9c'
     }
 }))(Button)
 
