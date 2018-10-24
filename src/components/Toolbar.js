@@ -27,7 +27,7 @@ class Toolbar extends Component {
 
         return (
             <div className={classes.root}>
-                <Badge color="primary" badgeContent={chatBadge} className={classes.chatBadge}>
+                <Badge color="secondary" badgeContent={chatBadge} className={classes.chatBadge}>
                     <StyledButton variant="outlined" size="small" color="primary" className={classes.button} onClick={this.handleToggleChatWindow}>
                         Chat
                     </StyledButton>
@@ -95,10 +95,13 @@ const styles = theme => ({
 
 const StyledButton = withStyles(theme => ({
     outlinedPrimary: {
-        border: '1px solid #2ecc4078',
+        border: '1px solid #ffd7008c',
+        '&:hover': {
+            border: '1px solid gold'
+        }
     },
     label: {
-        color: '#2ECC40'
+        color: 'gold'
     }
 }))(Button)
 
