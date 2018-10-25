@@ -128,8 +128,8 @@ io.on('connection', (socket) => {
                     if (state.is('setStarted')) {
                         console.log("BET", socket.id, socket.request.user.displayName, action.payload)
                         console.log("SET_STARTED", state.round.set.index)
-                        io.emit('action', {type: 'SET_STARTED', payload: state.round.set.index})                        
                         io.emit('action', {type: 'BETS_IN_PLACE', payload: state.round.bets})
+                        io.emit('action', {type: 'SET_STARTED', payload: state.round.set.index})                        
                         state.token = Uuid.v4()
                         const firstPlayer = state.players[state.first]
                         firstPlayer.emit('action', {type: 'PLAY', payload: state.token})

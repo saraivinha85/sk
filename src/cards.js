@@ -333,7 +333,7 @@ const assets = [
     {
         "name": "Scary Mary Flag",
         "color": "",
-        "assets": []
+        "assets": ["/assets/sk/sm.jpg", "/assets/sk/sm2.png"]
     },
     {
         "name": "Back",

@@ -16,9 +16,9 @@ class Hand extends React.Component {
     buildHand = () => {
         const { cards } = this.props
         return cards.map(c =>
-        <Grid key={c} item>
+        //<Grid key={c} item>
             <Card id={c} />
-        </Grid>
+        //</Grid>
         )
     }
 
@@ -26,7 +26,6 @@ class Hand extends React.Component {
         const { classes, canPlay } = this.props
         const { spacing } = this.state
         const hand = this.buildHand()
-
         return (
             <div>
                 <Grid item xs={12}>

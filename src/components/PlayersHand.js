@@ -2,9 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
-import Hand from './Hand'
+import Badge from '@material-ui/core/Badge'
 
 import Card from './Card'
 import GlowEffect from './GlowEffect'
@@ -14,7 +13,7 @@ import { placeBet } from '../actions/round'
 class PlayersHand extends React.Component {
 
     renderPlayers = () => {
-        const { width, height, players, playerId, classes, table, hand, currentPlayer } = this.props
+        const { width, height, players, bets, playerId, classes, table, hand, currentPlayer } = this.props
 
         const playerIndex = players.findIndex((p) => p.id === playerId)
         const sortedPlayers = players.slice(playerIndex + 1, players.length + 1).concat(players.slice(0, playerIndex))
@@ -74,8 +73,9 @@ class PlayersHand extends React.Component {
             const pIndex = players.indexOf(p)
             const cardsLeft = table[pIndex] !== null? 1: 0
             const played = table[playerIndex] !== null? 1: 0
+            const bet = bets[pIndex]
             const count = hand.length - cardsLeft + played
-            const avatar = <Avatar className={classes.avatar} src={p.photo}/>
+            const avatar = bet !== undefined ? <Badge color="primary" badgeContent={bet}><Avatar className={classes.avatar} src={p.photo}/></Badge> : <Avatar className={classes.avatar} src={p.photo}/>
             return <div key={p.id} style={{ position: 'absolute', left: `${placement[idx].x}px`, top: `${placement[idx].y}px` }}>
                 {currentPlayer === p.id? <GlowEffect className={classes.glow}>{avatar}</GlowEffect> : avatar}
                 <div className={handClass} >
@@ -137,6 +137,7 @@ const mapStateToProps = (state) => {
     return {
         playerId: state.game.id,
         hand: state.hand.cards,
+        bets: state.round.bets,
         table: state.round.cards,
         set: state.round.set,
         round: state.round.index,

@@ -5,6 +5,7 @@ import ContainerDimensions from 'react-container-dimensions'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
+import Badge from '@material-ui/core/Badge'
 
 import { Transition, config } from 'react-spring'
 
@@ -34,7 +35,7 @@ class Table extends React.Component {
     }
 
     render() {
-        const { classes, hasBet, table, players, playerId, currentPlayer } = this.props
+        const { classes, hasBet, table, players, playerId, currentPlayer, bet } = this.props
         const bets = this.renderBets()
         //const playedCards = this.renderCenterCards()
         const from = currentPlayer === null? { transform: 'translate3d(0,100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow } : { transform: 'translate3d(0,-100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow }
@@ -54,14 +55,15 @@ class Table extends React.Component {
                     }
                 </Transition>
             </div>
-            {!hasBet &&
+            {bet === null &&
             <div className={classes.betsContainer}>
                 <h1>Place your bet</h1>
                 <div className={classes.bets}>
                     {bets}
                 </div>
-        </div>}
+            </div>}
             <div className={classes.hand}>
+                {bet!== null && <Badge color="primary" badgeContent={bet}></Badge>}
                 <Hand />
             </div>
         </div>
@@ -88,6 +90,10 @@ const styles = {
         justifyContent: 'center',
         flexDirection: 'column',
         display: 'flex'
+    },
+    info: {
+        bottom: '9em',
+        position: 'absolute'
     },
     bets: {
         display: 'inline-flex',
@@ -116,8 +122,8 @@ const mapStateToProps = (state) => {
         hand: state.hand.cards,
         table: state.round.cards,
         players: state.game.players,
-        hasBet: state.round.bets.length > 0,
-        currentPlayer: state.round.currentPlayer
+        currentPlayer: state.round.currentPlayer,
+        bet: state.round.bet
     }
 }
 
