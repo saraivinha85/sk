@@ -10,7 +10,8 @@ import GlowEffect from './GlowEffect'
 class Hand extends React.Component {
 
     state = {
-        spacing: '0',    }
+        spacing: '0',
+    }
 
     buildHand = () => {
         const { cards } = this.props

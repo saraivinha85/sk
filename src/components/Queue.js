@@ -104,8 +104,8 @@ const styles = theme => ({
 const mapStateToProps = (state) => {
     return {
         id: state.game.id,
-        isJoined: state.game.queue.find((p) => {return p.id === state.game.id}) !== undefined,
-        players: state.game.queue
+        isJoined: state.game.players.find((p) => {return p.id === state.game.id}) !== undefined,
+        players: state.game.players
     }
 }
 

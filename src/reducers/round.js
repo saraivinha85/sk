@@ -1,4 +1,4 @@
-import { PLACE_BET } from '../actions/round'
+import { PLACE_BET, PLAY_CARD } from '../actions/round'
 
 const INITIAL_STATE = {
     cards: [],
@@ -11,6 +11,8 @@ const INITIAL_STATE = {
 
 const round = (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case PLAY_CARD:
+            return { ...state, canPlay: false }
         case PLACE_BET:
             return { ...state, bets: [...state.bets, action.payload] }
         case 'BETS_IN_PLACE':

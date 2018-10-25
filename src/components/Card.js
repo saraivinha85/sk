@@ -58,18 +58,18 @@ class Card extends React.Component {
                 <div className={classes.cardContainer}>
                     <img className={classes.background} src={cards[id].assets[0]} />
                     {cards[id].assets.length === 2 &&
-                        <div>
-                            <img className={classes.topLeftNumber} src={cards[id].assets[1]} />
-                            <img className={classes.topRightNumber} src={cards[id].assets[1]} />
-                            <img className={classes.bottomLeftNumber} src={cards[id].assets[1]} />
-                            <img className={classes.bottomRightNumber} src={cards[id].assets[1]} />
-                        </div>
+                    <div>
+                        <img className={classes.topLeftNumber} src={cards[id].assets[1]} />
+                        <img className={classes.topRightNumber} src={cards[id].assets[1]} />
+                        <img className={classes.bottomLeftNumber} src={cards[id].assets[1]} />
+                        <img className={classes.bottomRightNumber} src={cards[id].assets[1]} />
+                    </div>
                     }
                     {cards[id].assets.length === 3 &&
-                        <div>
-                            <img onClick={this.handlePirateSelection} className={classes.badgeLeft} src={cards[id].assets[1]} />
-                            <img onClick={this.handleFlagSelection} className={classes.badgeRight} src={cards[id].assets[2]} />
-                        </div>
+                    <div>
+                        <img onClick={this.handlePirateSelection} className={classes.badgeLeft} src={cards[id].assets[1]} />
+                        <img onClick={this.handleFlagSelection} className={classes.badgeRight} src={cards[id].assets[2]} />
+                    </div>
                     }
                 </div>
             </Paper>

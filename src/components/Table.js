@@ -6,11 +6,12 @@ import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Avatar from '@material-ui/core/Avatar'
 
+import { Transition, config } from 'react-spring'
+
 import Hand from './Hand'
 import Card from './Card'
 import { placeBet } from '../actions/round'
 import PlayersHand from './PlayersHand'
-import ThrowEffect from './ThrowEffect'
 
 class Table extends React.Component {
     renderCenterCards = () => {
@@ -43,19 +44,27 @@ class Table extends React.Component {
                     <PlayersHand />
                 </ContainerDimensions>
                 <div className={classes.centerCards}>
-                    {playedCards}
-                </div>
-                {!hasBet &&
-                    <div className={classes.betsContainer}>
-                        <h1>Place your bet</h1>
-                        <div className={classes.bets}>
-                            {bets}
-                        </div>
-                    </div>}
-                <div className={classes.hand}>
-                    <Hand />
-                </div>
+                    <Transition
+                        items={this.props.table.filter((c) => c !== null)} keys={item => item}
+                        from={{ transform: 'translate3d(0,100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow }}
+                        enter={{ transform: 'translate3d(0,0px,0) rotateZ(0deg)', opacity: 1, config: config.default }}
+                        leave={{ opacity: 0 }}>
+                        {item => props =>
+                        <div style={props}><Card id={item} disabled/></div>
+                    }
+                </Transition>
             </div>
+            {!hasBet &&
+            <div className={classes.betsContainer}>
+                <h1>Place your bet</h1>
+                <div className={classes.bets}>
+                    {bets}
+                </div>
+        </div>}
+            <div className={classes.hand}>
+                <Hand />
+            </div>
+        </div>
         )
     }
 }

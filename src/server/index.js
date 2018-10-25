@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
     IO_CLIENTS.push(socket)
     const players = getCurrentPlayers()
     socket.emit('action', {type: 'USER_WELCOME', payload: socket.id})
-    io.emit('action', {type: 'USER_JOIN', payload: { players: players }})
+    io.emit('action', {type: 'USER_JOIN', payload: players})
 
     socket.on('action', (action) => {
         console.log("Got action: " + action.type + " " + action.payload)

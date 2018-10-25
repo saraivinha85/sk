@@ -26,17 +26,18 @@ class ThrowEffect extends React.Component {
     }
 
     render() {
-        const {classes, children, className} = this.props
+        const {start, classes, children, className} = this.props
 
-        return (
-            <Container reset={this.state.reset} onRest={this.reset} state="glow">
-                { styles => {
-                    return <div className={`${className} ${classes.glow}`} style={{transform: `translateY(${styles.translate}%) rotateZ(${styles.boxShadow}deg)`}}>
-                        {children}
-                    </div>
-                }}
-            </Container>
-        )
+        const container = <Container onRest={this.reset} state="glow">
+            { styles => {
+                return <div className={`${className} ${classes.glow}`} style={{transform: `translateY(${styles.translate}%) rotateZ(${styles.boxShadow}deg)`}}>
+                    {children}
+                </div>
+            }}
+        </Container>
+
+
+          return (start? container : children)
     }
 }
 
