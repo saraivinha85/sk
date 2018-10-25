@@ -34,10 +34,10 @@ class Table extends React.Component {
     }
 
     render() {
-        const { classes, hasBet, table } = this.props
+        const { classes, hasBet, table, players, playerId, currentPlayer } = this.props
         const bets = this.renderBets()
-        const playedCards = this.renderCenterCards()
-
+        //const playedCards = this.renderCenterCards()
+        const from = currentPlayer === null? { transform: 'translate3d(0,100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow } : { transform: 'translate3d(0,-100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow }
         return (
             <div className={classes.root}>
                 <ContainerDimensions>
@@ -46,7 +46,7 @@ class Table extends React.Component {
                 <div className={classes.centerCards}>
                     <Transition
                         items={this.props.table.filter((c) => c !== null)} keys={item => item}
-                        from={{ transform: 'translate3d(0,100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow }}
+                        from={from}
                         enter={{ transform: 'translate3d(0,0px,0) rotateZ(0deg)', opacity: 1, config: config.default }}
                         leave={{ opacity: 0 }}>
                         {item => props =>
@@ -103,9 +103,9 @@ const styles = {
     },
     bet: {
         backgroundColor: '#0000002b',
-        width: '80px',
-        height: '80px',
-        margin: '2px',
+        width: '60px',
+        height: '60px',
+        margin: '3px',
         border: '1px solid gold'
     }
 }
@@ -116,7 +116,8 @@ const mapStateToProps = (state) => {
         hand: state.hand.cards,
         table: state.round.cards,
         players: state.game.players,
-        hasBet: state.round.bets.length > 0
+        hasBet: state.round.bets.length > 0,
+        currentPlayer: state.round.currentPlayer
     }
 }
 
