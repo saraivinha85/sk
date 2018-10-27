@@ -35,8 +35,10 @@ class Table extends React.Component {
     }
 
     render() {
-        const { classes, hasBet, table, players, playerId, currentPlayer, bet } = this.props
+        const { classes, hasBet, table, players, playerId, currentPlayer, bet, tricks } = this.props
         const bets = this.renderBets()
+        const playerIdx = players.findIndex(p=>p.id===playerId)
+        const trickCount = tricks[playerIdx] || 0
         //const playedCards = this.renderCenterCards()
         const from = currentPlayer === null? { transform: 'translate3d(0,100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow } : { transform: 'translate3d(0,-100%,0) rotateZ(360deg)', opacity: 0.5, config: config.slow }
         return (
@@ -63,7 +65,7 @@ class Table extends React.Component {
                 </div>
             </div>}
             <div className={classes.hand}>
-                {bet!== null && <Badge color="primary" badgeContent={bet}></Badge>}
+                {bet!== null && <Badge color="primary" badgeContent={`${trickCount}/${bet}`}></Badge>}
                 <Hand />
             </div>
         </div>
@@ -123,7 +125,8 @@ const mapStateToProps = (state) => {
         table: state.round.cards,
         players: state.game.players,
         currentPlayer: state.round.currentPlayer,
-        bet: state.round.bet
+        bet: state.round.bet,
+        tricks: state.round.tricks
     }
 }
 

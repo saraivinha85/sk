@@ -6,7 +6,7 @@ import Random from 'random-array-generator'
 import Passport from 'passport'
 import Path from 'path'
 import Uuid from 'uuid'
-import Sleep from 'sleep'
+import Wait from 'wait-for-stuff'
 
 import {expressAuth, socketioAuth, sessionOpts} from './auth'
 
@@ -165,19 +165,19 @@ io.on('connection', (socket) => {
                         })
                     } else if (state.is('setEnded')) {
                         console.log("SET_ENDED", state.round.set.index, state.first)
+                        io.emit('action', {type: 'SET_ENDED', payload: {index: state.round.set.index, tricks: state.round.tricks}})
+
+                        Wait.for.time(2)
+
                         return state.nextSet().then(() => {
                             if (state.is('roundEnded')) {
-                                Sleep.sleep(2)
                                 console.log("ROUND_ENDED", state.round.index)
-                                io.emit('action', {type: 'SCORE', payload: state.round.score})
+                                io.emit('action', {type: 'ROUND_ENDED', payload: { score: state.round.score, currentPlayer: state.players[state.first].id }})
                                 console.log("SCORE", state.score)
                                 console.log("LAST TRICK WINNER", state.players[state.first].id, state.players[state.first].request.user.displayName)
                                 return state.nextRound()
                             }
-
-                            Sleep.sleep(2)
-                            io.emit('action', {type: 'SET_ENDED', payload: state.round.set.index})
-
+                            
                             state.token = Uuid.v4()
                             const firstPlayer = state.players[state.first]
                             console.log("TRICK WINNER", firstPlayer.id, firstPlayer.request.user.displayName)
@@ -243,4 +243,3 @@ const dealCardsForRound = (players, round) => {
         c.emit('action', {type: 'DEAL_CARDS', payload: hand})
     })
 }
-

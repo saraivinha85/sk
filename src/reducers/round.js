@@ -7,7 +7,8 @@ const INITIAL_STATE = {
     set: null,
     token: null,
     bet: null,
-    score: []
+    score: [],
+    tricks: []
 }
 
 const round = (state = INITIAL_STATE, action) => {
@@ -19,19 +20,19 @@ const round = (state = INITIAL_STATE, action) => {
         case 'BETS_IN_PLACE':
             return { ...state, bets: action.payload }
         case 'ROUND_STARTED':
-            return { ...state, index: action.payload, cards: [], bets: [], bet: null, token: null, canPlay: false }
+            return { ...state, index: action.payload, cards: [], bets: [], tricks: [], bet: null, token: null, canPlay: false }
         case 'SET_STARTED':
             return { ...state, set: action.payload }
         case 'SET_ENDED':
-            return { ...state, cards: [] }
+            return { ...state, cards: [], tricks: action.payload.tricks }
         case 'PLAY':
             return { ...state, canPlay: true, token: action.payload, currentPlayer: null }
         case 'WAIT_PLAY':
             return { ...state, canPlay: false, token: null, currentPlayer: action.payload }
         case 'CARD_PLAYED':
             return { ...state, cards: action.payload }
-        case 'SCORE':
-            return { ...state, score: [...state.score, action.payload] }
+        case 'ROUND_ENDED':
+            return { ...state, score: [...state.score, action.payload.score], currentPlayer: action.payload.currentPlayer }
         default:
             return state
     }
