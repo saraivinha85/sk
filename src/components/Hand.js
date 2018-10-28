@@ -16,9 +16,9 @@ class Hand extends React.Component {
     buildHand = () => {
         const { cards } = this.props
         return cards.map(c =>
-        //<Grid key={c} item>
+        <Grid key={c} item>
             <Card id={c} />
-        //</Grid>
+        </Grid>
         )
     }
 
@@ -30,6 +30,7 @@ class Hand extends React.Component {
             <div>
                 <Grid item xs={12}>
                     <Grid
+                        className={classes.grid}
                         container
                         justify="center"
                         spacing={Number(spacing)}
@@ -48,6 +49,12 @@ const styles = theme => ({
     },
     root: {
         flexGrow: 1,
+    },
+    grid: {
+        // flexWrap: 'nowrap',
+        // overflowX: 'auto',
+        // display: 'flex',
+        // justifyContent: 'flex-start'
     },
     control: {
         padding: theme.spacing.unit * 2,
