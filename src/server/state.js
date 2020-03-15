@@ -30,7 +30,7 @@ const fsm = {
         {name: 'allowPlay', from: 'setStarted', to: 'waitingPlays'},
         {name: 'play', from: 'waitingPlays', to: ['waitingPlays', 'setEnded'], condition: function () {return this.round.set.plays.find((b) => b === null) === undefined? 1: 0}},
         {name: 'nextSet', from: 'setEnded', to: ['setStarted', 'roundEnded'], condition: function () { return this.round.set.index >= this.round.index? 1: 0 }},
-        {name: 'nextRound', from: 'roundEnded', to: ['roundStarted', 'end'], condition: function () { return this.round.index + 1 === 2? 1 : 0 }},
+        {name: 'nextRound', from: 'roundEnded', to: ['roundStarted', 'end'], condition: function () { return this.round.index + 1 === 10? 1 : 0 }},
         {name: 'finish', from: 'end', to: 'lobby'},
     ],
     callbacks: {
