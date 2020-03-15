@@ -33,7 +33,7 @@ class Toolbar extends Component {
                     </StyledButton>
                 </Badge>
                 <StyledButton variant="outlined" size="small" className={classes.button} onClick={this.handleToggleScoreWindow}>
-                    Score 
+                    Score
                 </StyledButton>
                 <div className={classes.user}>
                     <Avatar

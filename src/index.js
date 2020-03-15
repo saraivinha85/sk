@@ -1,13 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
-import {createStore, applyMiddleware} from 'redux'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
 import { withRouter } from 'react-router-dom'
 
 import io from 'socket.io-client'
 import createSocketIOMiddleware from 'redux-socket.io'
 
 import { SnackbarProvider } from 'notistack'
+
+import { Beforeunload } from 'react-beforeunload'
 
 import logger from 'redux-logger'
 
@@ -17,12 +19,12 @@ import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker'
 
 
-const socket = io("/") 
+const socket = io("/")
 
 socket.on('error', (reason) => {
-	//if (reason === '404') {
-		//this.props.history
-	//}
+    //if (reason === '404') {
+    //this.props.history
+    //}
 })
 
 
@@ -32,9 +34,11 @@ const store = applyMiddleware(logger, socketIOMiddleware)(createStore)(reducers)
 ReactDOM.render(
     <Provider store={store}>
         <SnackbarProvider>
-            <Layout />
+            <Beforeunload onBeforeunload={() => "You'll not be able to join the game again. Are you sure?"}>
+                <Layout />
+            </Beforeunload>
         </SnackbarProvider>
-    </Provider>,
+    </Provider >,
     document.querySelector('#root')
 )
 

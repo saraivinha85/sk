@@ -21,6 +21,7 @@
     "prop-types": "latest",
     "random-array-generator": "^1.0.7",
     "react": "latest",
+    "react-beforeunload": "^2.1.0",
     "react-container-dimensions": "^1.4.1",
     "react-dom": "latest",
     "react-redux": "latest",
