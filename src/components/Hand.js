@@ -57,7 +57,7 @@ const styles = theme => ({
         // justifyContent: 'flex-start'
     },
     control: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
     },
     turnIndicatorOn: {
         border: '1px solid',

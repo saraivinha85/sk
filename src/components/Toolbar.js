@@ -74,7 +74,7 @@ const styles = theme => ({
     },
     chatBadge: {
         margin: {
-            margin: theme.spacing.unit * 2,
+            margin: theme.spacing(2),
         },
     },
     badgeVisible: {

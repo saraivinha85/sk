@@ -15,7 +15,7 @@
     "fsm-as-promised": "^0.16.0",
     "https-proxy-agent": "^2.2.1",
     "passport": "^0.4.0",
-    "passport-google-oauth2": "^0.1.6",
+    "passport-google-oauth2": "^0.2.0",
     "passport.socketio": "^3.7.0",
     "prop-types": "latest",
     "random-array-generator": "^1.0.7",

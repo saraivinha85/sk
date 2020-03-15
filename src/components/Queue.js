@@ -52,7 +52,7 @@ class Queue extends Component {
                 <div className={classes.root}>
                     {players}
                 </div>
-                <Button variant="fab" color="primary" disabled={isJoined} className={classes.button} onClick={this.handleJoinQueue}>
+                <Button variant="outlined" color="primary" disabled={isJoined} className={classes.button} onClick={this.handleJoinQueue}>
                     <PersonAdd />
                 </Button>
                 <Button color="primary" variant='contained' disabled={!isJoined} className={classes.button} onClick={this.handleStartGame}>
@@ -83,13 +83,13 @@ const styles = theme => ({
         flexWrap: 'wrap',
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     },
     leftIcon: {
-        marginLeft: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
     },
     chip: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
         display: 'inline-table',
     },
     bigAvatar: {

@@ -19,8 +19,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, players: action.payload}
         case 'ROUND_STARTED':
             return {...state, started: true}
-        case 'GAME_ENDED':
-            return {...state, started: false}
+        case 'FINISH':
+            return {...state, started: false, isScoreOpen: true}
         case 'NEW_COMMENT':
             return {...state, comments: [...state.comments, action.payload ], chatBadge: state.isChatOpen? 0 : state.chatBadge + 1 }
         case 'TOGGLE_CHAT_WINDOW':

@@ -175,7 +175,12 @@ io.on('connection', (socket) => {
                                 io.emit('action', {type: 'ROUND_ENDED', payload: { score: state.round.score, currentPlayer: state.players[state.first].id }})
                                 console.log("SCORE", state.score)
                                 console.log("LAST TRICK WINNER", state.players[state.first].id, state.players[state.first].request.user.displayName)
-                                return state.nextRound()
+                                return state.nextRound().then(() => {
+                                    if (state.is("end")) {
+                                        io.emit('action', {type: 'FINISH', payload: { score: state.score }})
+                                        return state.finish()
+                                    }
+                                })
                             }
                             
                             state.token = Uuid.v4()

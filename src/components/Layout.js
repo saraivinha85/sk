@@ -17,7 +17,7 @@ class Layout extends Component {
 
         return (
             <div className={classes.root}>
-                <Grid container spacing={16}>
+                <Grid container spacing={8}>
                     <Grid item xs={12}>
                         <StyledPaper className={classes.paper}>
                             <Toolbar />
@@ -47,7 +47,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
     paper: {
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing(2),
         textAlign: 'center',
         color: '#ffffff9c',
     },
