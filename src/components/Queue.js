@@ -42,22 +42,24 @@ class Queue extends Component {
     }
 
     render() {
-        const {classes, isJoined} = this.props
+        const {classes, isJoined, players, id} = this.props
 
-        const players = this.createChips()
+        const playerChips = this.createChips()
+
+        const isFirst =  players.length != 0? players[0].id === id : false
 
         return (
             <div>
                 <ListSubheader component="div">Queue</ListSubheader>
                 <div className={classes.root}>
-                    {players}
+                    {playerChips}
                 </div>
                 <Button variant="outlined" color="primary" disabled={isJoined} className={classes.button} onClick={this.handleJoinQueue}>
                     <PersonAdd />
                 </Button>
-                <Button color="primary" variant='contained' disabled={!isJoined} className={classes.button} onClick={this.handleStartGame}>
+                { isFirst && <Button color="primary" variant='contained' disabled={!isJoined} className={classes.button} onClick={this.handleStartGame}>
                     Start
-                </Button>
+                </Button>}
             </div>
         )
     }

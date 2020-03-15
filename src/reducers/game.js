@@ -27,6 +27,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, isChatOpen: !state.isChatOpen, chatBadge: 0 }
         case 'TOGGLE_SCORE_WINDOW':
             return {...state, isScoreOpen: !state.isScoreOpen}
+        case 'ERROR':
+            return {...state, error: action.payload}
         default:
             return state
     }

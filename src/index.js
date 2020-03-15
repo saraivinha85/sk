@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom'
 import io from 'socket.io-client'
 import createSocketIOMiddleware from 'redux-socket.io'
 
+import { SnackbarProvider } from 'notistack'
+
 import logger from 'redux-logger'
 
 import './index.css'
@@ -29,7 +31,9 @@ const store = applyMiddleware(logger, socketIOMiddleware)(createStore)(reducers)
 
 ReactDOM.render(
     <Provider store={store}>
-        <Layout />
+        <SnackbarProvider>
+            <Layout />
+        </SnackbarProvider>
     </Provider>,
     document.querySelector('#root')
 )

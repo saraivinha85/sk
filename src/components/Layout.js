@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 
+import { withSnackbar } from 'notistack'
+
 import Toolbar from './Toolbar'
 import ChatWindow from './ChatWindow'
 import ScoreWindow from './ScoreWindow'
@@ -13,7 +15,11 @@ import Table from './Table'
 
 class Layout extends Component {
     render() {
-        const { classes, isGameStarted } = this.props
+        const { classes, isGameStarted, enqueueSnackbar, error } = this.props
+
+        if (error) {
+            enqueueSnackbar(error)
+        }
 
         return (
             <div className={classes.root}>
@@ -55,7 +61,8 @@ const styles = theme => ({
 
 const mapStateToProps = (state) => {
     return {
-        isGameStarted: state.game.started
+        isGameStarted: state.game.started,
+        error: state.game.error
     }
 }
 
@@ -65,4 +72,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Layout))
+export default withStyles(styles)(withSnackbar(connect(mapStateToProps, mapDispatchToProps)(Layout)))

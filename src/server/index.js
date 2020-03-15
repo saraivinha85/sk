@@ -78,7 +78,6 @@ io.set('authorization', function (req, callback) {
 io.on('connection', (socket) => {
     console.log("Socket connected: " + socket.id)
 
-    state = State()
     IO_CLIENTS.push(socket)
     const players = getCurrentPlayers()
     socket.emit('action', {type: 'USER_WELCOME', payload: socket.id})
@@ -89,6 +88,12 @@ io.on('connection', (socket) => {
 
         switch (action.type) {
             case 'server/JOIN_QUEUE':
+                if (state.players.length === 6) {
+                    return socket.emit('action', {type: 'ERROR', payload: "Cannot join because maximum players in queue was reached!"}) 
+                } else if (state.current !== 'lobby') {
+                    return socket.emit('action', {type: 'ERROR', payload: "Game already in progress :("}) 
+                }
+
                 return state.join(socket)
                     .then(() => {
                         const playersInfo = getPlayersInfo(state.players)
@@ -112,6 +117,10 @@ io.on('connection', (socket) => {
                         return socket.emit('action', {type: 'ERROR', payload: "Can't leave the game queue!"})
                     })
             case 'server/START_GAME':
+                if (state.players.length < 3) {
+                    return socket.emit('action', {type: 'ERROR', payload: "Cannot start game because more players are needed :("}) 
+                }
+
                 return state.start().then(()=>{
                     io.emit('action', {type: 'ROUND_STARTED', payload: state.round.index})
                     console.log("ROUND_STARTED", state.round.index)
