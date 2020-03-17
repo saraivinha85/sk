@@ -10,8 +10,8 @@ import { withStyles } from '@material-ui/core/styles'
 
 class Players extends React.Component {
     renderPlayers = () => {
-        const {classes, players} = this.props
-        return players.map((player, index) =>	{
+        const {classes, users} = this.props
+        return users.map((player, index) =>	{
             return <ListItem key={player.id}>
                 <Avatar
                     src={player.photo}
@@ -22,7 +22,7 @@ class Players extends React.Component {
     }
 
 	render() {
-		const { classes, players, leader } = this.props;
+		const { classes, users, leader } = this.props;
         return (
             <div className={classes.root}>
                 {/* <Paper elevation={1}> */}
@@ -47,13 +47,14 @@ const styles = {
         color: '#ffffff9c'
     },
     itemText: {
+        paddingLeft: '7px',
         color: '#ffffff9c'
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        players: state.game.players,
+        users: state.game.users,
         leader: state.game.leader
     }
 }

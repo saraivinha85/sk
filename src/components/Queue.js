@@ -6,6 +6,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 
 import PersonAdd from '@material-ui/icons/PersonAdd'
 
@@ -43,14 +44,12 @@ class Queue extends Component {
 
     render() {
         const {classes, isJoined, players, id} = this.props
-
         const playerChips = this.createChips()
-
         const isFirst =  players.length != 0? players[0].id === id : false
 
         return (
-            <div>
-                <ListSubheader component="div">Queue</ListSubheader>
+            <StyledPaper>
+                <ListSubheader className={classes.subheader} component="div">Queue</ListSubheader>
                 <div className={classes.root}>
                     {playerChips}
                 </div>
@@ -60,20 +59,25 @@ class Queue extends Component {
                 { isFirst && <Button color="primary" variant='contained' disabled={!isJoined} className={classes.button} onClick={this.handleStartGame}>
                     Start
                 </Button>}
-            </div>
+            </StyledPaper>
         )
     }
 }
 
+const StyledPaper = withStyles({
+    root: {
+        backgroundColor: '#2f2f2fbd',
+        color: '#ffffff9c',
+        overflow: 'hidden'
+    }
+})(Paper)
+
 const StyledChip = withStyles({
     root: {
-        marginTop: 0,
-        marginBottom: 0,
         backgroundColor: '#00000042',
         color: 'unset',
     },
     deleteIcon: {
-        margin: '0px',
         color: 'unset'
     }
 })(Chip)
@@ -84,6 +88,9 @@ const styles = theme => ({
         justifyContent: 'center',
         flexWrap: 'wrap',
     },
+    subheader: {
+        backgroundColor: 'transparent'
+    },
     button: {
         margin: theme.spacing(1),
     },
@@ -92,14 +99,8 @@ const styles = theme => ({
     },
     chip: {
         margin: theme.spacing(1),
-        display: 'inline-table',
     },
     bigAvatar: {
-        width: 70,
-        height: 70,
-        display: 'inline-flex',
-        marginRight: '0px',
-        marginTop: '7px'
     },
 })
 

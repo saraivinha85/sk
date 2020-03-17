@@ -10,7 +10,9 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
+import Grid from '@material-ui/core/Grid'
 
+import Players from './Players'
 import { submitComment } from '../actions/game'
 
 class Chat extends Component {
@@ -33,11 +35,12 @@ class Chat extends Component {
     }
 
     renderComments = () => {
-        return this.props.comments.map(row => {
+        const {comments, classes} = this.props
+        return comments.map(row => {
             return (
                 <ListItem key={row.ts}>
                     <Avatar src={row.photo} />
-                    <ListItemText primary={row.from} secondary={`${new Date(row.ts).toLocaleTimeString()}: ${row.text}`} />
+                    <ListItemText className={classes.text} primary={row.from} secondary={`${new Date(row.ts).toLocaleTimeString()}: ${row.text}`} />
                 </ListItem>
             )
         })
@@ -51,33 +54,62 @@ class Chat extends Component {
         const { classes } = this.props
 
         return (
-            <Paper className={classes.paper}>
-                <ListSubheader className={classes.header} component="div">Chat</ListSubheader>
-                <div style={{ height: '40vh', overflow: 'auto' }}>
-                    <List className={'list'}>
-                        {this.renderComments()}
-                    </List>
-                </div>
-                <TextField
-                    id="standard-full-width"
-                    fullWidth
-                    variant='filled'
-                    inputRef={(r)=>{this.input = r}}
-                    InputProps={{
-                        inputProps: {className: classes.input},
-                        autoFocus: true,
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    onKeyPress={this.submitComment}
-                />
-            </Paper>
+            <Grid container spacing={2}>
+                <Grid item xs={3}>
+                    <StyledPaper className={classes.paper2}>
+                        <Players />
+                    </StyledPaper>
+                </Grid>
+                <Grid item xs={9}>
+                    <StyledPaper className={classes.paper2}>
+                        <Paper className={classes.paper2}>
+                            <ListSubheader className={classes.header} component="div">Chat</ListSubheader>
+                            <div style={{ height: '40vh', overflow: 'auto' }}>
+                                <List className={'list'}>
+                                    {this.renderComments()}
+                                </List>
+                            </div>
+                            <TextField
+                                id="standard-full-width"
+                                fullWidth
+                                variant='filled'
+                                inputRef={(r)=>{this.input = r}}
+                                InputProps={{
+                                    inputProps: {className: classes.input},
+                                    autoFocus: true,
+                                }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onKeyPress={this.submitComment}
+                            />
+                        </Paper>
+
+                    </StyledPaper>
+                </Grid>
+            </Grid>
         )
     }
 }
 
+const StyledPaper = withStyles({
+    root: {
+        backgroundColor: '#2f2f2fbd',
+        overflow: 'hidden'
+    }
+})(Paper)
+
 const styles = {
+    root: {
+        backgroundColor: '#ffffff00',
+    },
+    text: {
+        paddingLeft: '7px',
+    },
+    paper2: {
+        height: '100%',
+        textAlign: 'center'
+    },
     header: {
     },
     paper: {

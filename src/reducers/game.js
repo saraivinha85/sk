@@ -1,4 +1,5 @@
 const INITIAL_STATE = {
+    users: [],
     players: [],
     queue: [],
     comments: [],
@@ -14,8 +15,9 @@ const game = (state=INITIAL_STATE, action) => {
         case 'USER_LEFT':
             return {...state, users: action.payload}
         case 'USER_WELCOME':
-            return {...state, id: action.payload}
+            return {...state, id: action.payload.id, players: action.payload.players}
         case 'PLAYER_JOIN':
+        case 'PLAYER_LEFT':
             return {...state, players: action.payload}
         case 'ROUND_STARTED':
             return {...state, started: true}

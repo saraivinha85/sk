@@ -79,9 +79,9 @@ io.on('connection', (socket) => {
     console.log("Socket connected: " + socket.id)
 
     IO_CLIENTS.push(socket)
-    const players = getCurrentPlayers()
-    socket.emit('action', {type: 'USER_WELCOME', payload: socket.id})
-    io.emit('action', {type: 'USER_JOIN', payload: players})
+    const users = getCurrentUsers()
+    socket.emit('action', {type: 'USER_WELCOME', payload: {id: socket.id, players: getPlayersInfo(state.players)}})
+    io.emit('action', {type: 'USER_JOIN', payload: users})
 
     socket.on('action', (action) => {
         console.log("Got action: " + action.type + " " + action.payload)
@@ -212,7 +212,6 @@ io.on('connection', (socket) => {
                         }).catch((error) => {
                             console.log(error)
                             return socket.emit('action', {type: 'ERROR', payload: "Can't start game!"})
-
                         })
                     } 
 
@@ -227,12 +226,16 @@ io.on('connection', (socket) => {
         console.log("Socket disconnected: " + socket.id)
         const idx = IO_CLIENTS.indexOf(socket)
         IO_CLIENTS.splice(idx, 1)
-        const players = getCurrentPlayers()
+        const users = getCurrentUsers()
+        const playerIdx = getPlayerIndex(socket, state.players)
+        if (playerIdx>= 0) {
+            state.players.splice(playerIdx, 1)
+            io.emit('action', {type: 'PLAYER_LEFT', payload: getPlayersInfo(state.players)})
+        }
 
-
-
-        if (players.length>0) {
-            io.emit('action', {type: 'USER_LEFT', payload: {players: players, leader: LEADER}})
+        if (users.length>0) {
+            console.log("User disconnected: " + socket.id)
+            io.emit('action', {type: 'USER_LEFT', payload: users})
         }
     })
 })
@@ -241,7 +244,7 @@ const getPlayerIndex = (socket, players) => {
     return players.findIndex((c) => {return c.id === socket.id})
 }
 
-const getCurrentPlayers = () => {
+const getCurrentUsers = () => {
     return IO_CLIENTS.map((c) => {return { id: c.id, name: c.request.user.displayName, photo: c.request.user.image}})
 }
 

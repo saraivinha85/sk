@@ -22,17 +22,17 @@ class Toolbar extends Component {
     }
 
     render() {
-        const { classes, player, chatBadge } = this.props
+        const { classes, player, chatBadge, isGameStarted } = this.props
         const { name, photo } = player || {}
 
         return (
             <div className={classes.root}>
-                <Badge color="secondary" badgeContent={chatBadge} className={classes.chatBadge}>
-                    <StyledButton variant="outlined" size="small" className={classes.button} onClick={this.handleToggleChatWindow}>
+                <Badge style={{visibility: isGameStarted? 'show': 'hidden' }} color="secondary" badgeContent={chatBadge} className={classes.chatBadge}>
+                    <StyledButton style={{visibility: isGameStarted? 'show': 'hidden' }} variant="outlined" size="small" className={classes.button} onClick={this.handleToggleChatWindow}>
                         Chat
                     </StyledButton>
                 </Badge>
-                <StyledButton variant="outlined" size="small" className={classes.button} onClick={this.handleToggleScoreWindow}>
+                <StyledButton style={{visibility: isGameStarted? 'show': 'hidden' }} variant="outlined" size="small" className={classes.button} onClick={this.handleToggleScoreWindow}>
                     Score
                 </StyledButton>
                 <div className={classes.user}>
@@ -45,7 +45,7 @@ class Toolbar extends Component {
                     </Typography>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -107,7 +107,8 @@ const StyledButton = withStyles(theme => ({
 const mapStateToProps = (state) => {
     return {
         player: state.game.players.find((p) => p.id === state.game.id),
-        chatBadge: state.game.chatBadge
+        chatBadge: state.game.chatBadge,
+        isGameStarted: state.game.isGameStarted
     }
 }
 

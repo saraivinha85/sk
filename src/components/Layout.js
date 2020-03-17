@@ -10,7 +10,7 @@ import { withSnackbar } from 'notistack'
 import Toolbar from './Toolbar'
 import ChatWindow from './ChatWindow'
 import ScoreWindow from './ScoreWindow'
-import Queue from './Queue'
+import Lobby from './Lobby'
 import Table from './Table'
 
 class Layout extends Component {
@@ -23,7 +23,7 @@ class Layout extends Component {
 
         return (
             <div className={classes.root}>
-                <Grid container spacing={8}>
+                <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <StyledPaper className={classes.paper}>
                             <Toolbar />
@@ -31,7 +31,7 @@ class Layout extends Component {
                     </Grid>
                     <Grid item xs={12}>
                         <StyledPaper className={classes.paper}>
-                            {isGameStarted ? <Table /> : <Queue />}
+                            {isGameStarted ? <Table /> : <Lobby />}
                         </StyledPaper>
                     </Grid>
                 </Grid>

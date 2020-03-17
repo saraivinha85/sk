@@ -4,10 +4,8 @@ import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Drawer from '@material-ui/core/Drawer'
-import Grid from '@material-ui/core/Grid'
 
 import Chat from './Chat'
-import Players from './Players'
 import { toggleChatWindow } from '../actions/game'
 
 class ChatWindow extends React.Component {
@@ -27,18 +25,7 @@ class ChatWindow extends React.Component {
                     onClose={this.handleClose}
                     PaperProps={{ component: StyledPaper }}
                 >
-                    <Grid container spacing={8}>
-                        <Grid item xs={3}>
-                            <StyledPaper className={classes.paper}>
-                                <Players />
-                            </StyledPaper>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <StyledPaper className={classes.paper}>
-                                <Chat />
-                            </StyledPaper>
-                        </Grid>
-                    </Grid>
+                    <Chat />
                 </Drawer>
             </StyledPaper>
         )
