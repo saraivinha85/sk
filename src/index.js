@@ -19,7 +19,7 @@ import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker'
 
 
-const socket = io("/")
+const socket = io("/", { forceNew: true })
 
 socket.on('error', (reason) => {
     //if (reason === '404') {

@@ -1,7 +1,6 @@
 const INITIAL_STATE = {
     users: [],
     players: [],
-    queue: [],
     comments: [],
     started: false,
     isChatOpen: false,
@@ -31,6 +30,8 @@ const game = (state=INITIAL_STATE, action) => {
             return {...state, isScoreOpen: !state.isScoreOpen}
         case 'ERROR':
             return {...state, error: action.payload}
+        case 'RECOVER':
+            return {...state, users: action.payload.users, players: action.payload.players, started: true, id: action.payload.id}
         default:
             return state
     }

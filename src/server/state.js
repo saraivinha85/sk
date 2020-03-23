@@ -5,6 +5,7 @@ import {trickScore, roundScore} from './score'
 const s = {
     players: [],
     first: null,
+    currentIdx: null,
     round: {
         index: -1,
         bets: [],
@@ -14,7 +15,8 @@ const s = {
         },
         score: [],
         tricks: [],
-        bonus: []
+        bonus: [],
+        hand: []
     },
     score: []
 }
@@ -41,6 +43,7 @@ const fsm = {
             this.round.index = -1
             this.score = new Array(this.players.length).fill(0)
             this.first = 0
+            this.currentIdx = 0
         },
         onenterroundStarted: function (options) {
             this.round.index += 1
@@ -48,6 +51,7 @@ const fsm = {
             this.round.tricks = new Array(this.players.length).fill(0)
             this.round.bonus = new Array(this.players.length).fill(0)
             this.round.set.index = -1
+            this.round.hand = new Array(this.players.length).fill([])
         },
         onenterroundEnded: function (options) {
             const score = roundScore(this.round.index, this.round.bets, this.round.tricks, this.round.bonus)
@@ -70,6 +74,7 @@ const fsm = {
             this.round.tricks[trick.winner] += 1
             this.round.bonus[trick.winner] += trick.bonus
             this.first = trick.winner
+            this.currentIdx = trick.winner
         },
         onplay: function (options) {            
             this.round.set.plays[options.args[0]] = options.args[1]

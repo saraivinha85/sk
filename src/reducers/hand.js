@@ -11,6 +11,8 @@ const hand = (state=INITIAL_STATE, action) => {
         case PLAY_CARD:
             const card = action.payload.id === 66? 6 : action.payload.id
             return {...state, cards: state.cards.filter( c => c !== card )}
+        case 'RECOVER':
+            return {...state, cards: action.payload.hand}
         default:
             return state
     }

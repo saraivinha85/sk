@@ -35,6 +35,14 @@ const round = (state = INITIAL_STATE, action) => {
             return { ...state, score: [...state.score, action.payload.score], currentPlayer: action.payload.currentPlayer }
         case 'FINISH':
             return { ...state }
+        case 'RECOVER':
+                return {
+                    ...state, bet: action.payload.bet,
+                    token: action.payload.token, index: action.payload.round,
+                    set: action.payload.set, canPlay: action.payload.canPlay,
+                    bets: action.payload.bets,
+                    cards: action.payload.cards
+                }
         default:
             return state
     }
